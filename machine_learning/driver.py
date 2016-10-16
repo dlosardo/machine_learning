@@ -33,10 +33,10 @@ from squared_error_loss import SquaredErrorLoss
 from gradient_descent import GradientDescent
 
 def get_input_data(input_data_file):
-    data = np.genfromtxt(input_data_file, dtype=float, delimited = ',')
+    data = np.genfromtxt(input_data_file, dtype=float, delimiter = ',')
     return data
 
-def extract_data()
+#def extract_data()
 
 def run(
         input_data_file):
