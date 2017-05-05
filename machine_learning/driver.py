@@ -28,9 +28,11 @@
 #run.py --input-data-file "data/input/ex1data1.txt"
 
 import numpy as np
-from simple_linear_regression import SimpleLinearRegression
-from squared_error_loss import SquaredErrorLoss
-from gradient_descent import GradientDescent
+from machine_learning.hypothesis.simple_linear_regression import SimpleLinearRegression
+from machine_learning.cost_function.squared_error_loss import SquaredErrorLoss
+from machine_learning.algorithm.gradient_descent import GradientDescent
+
+import machine_learning.utils.utils
 
 def get_input_data(input_data_file):
     data = np.genfromtxt(input_data_file, dtype=float, delimiter = ',')
@@ -38,8 +40,7 @@ def get_input_data(input_data_file):
 
 #def extract_data()
 
-def run(
-        input_data_file):
+def run(input_data_file):
     """
     """
     # parameter values
@@ -47,9 +48,6 @@ def run(
     slope = 0.
     param_values = {"intercept": intercept,
             "slope": slope}
-    # hypothesis object
-    hypo = SimpleLinearRegression()
-    hypo.initialize_parameters(param_values)
 
     # name of file where data is stored
     #file_name = 'data/input/ex1data1.txt'
@@ -64,8 +62,11 @@ def run(
     # reshape to dimension nobs x 1
     yvalues = yvalues.reshape((len(yvalues), 1))
 
+    # hypothesis object
+    hypo = SimpleLinearRegression(features)
+    #hypo.initialize_parameters(param_values)
     # cost function object
-    sel = SquaredErrorLoss(hypo, features, yvalues)
-    gd = GradientDescent(.0001, param_values, .000000001, sel)
+    sel = SquaredErrorLoss(hypo, yvalues)
+    gd = GradientDescent(.0001, .000000001, sel)
     gd.algorithm()
-    print gd.get_parameters()
+    print(gd.get_parameters())

@@ -1,9 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup
+#try:
+#    from setuptools import setup, find_packages
+#except ImportError:
+from setuptools import setup
+#from distutils.core import setup
 
 from os import path
 
@@ -24,12 +25,13 @@ setup(name='machine_learning',
     download_url='todo',
     author_email='dlosardo@gmail.com',
     version='0.1',
-    install_requires=get_requirements(),
-    packages=find_packages(),
-    scripts=['bin/run.py'],
-    entry_points={
-        'console_scripts': [
-            'machine_learning=machine_learning:main'
-            ]
-        }
+    #install_requires=get_requirements(),
+    packages=['machine_learning'],
+    package_dir={'machine_learning': ''},
+    scripts=['bin/run.py']
+    #entry_points={
+    #    'console_scripts': [
+    #        'machine_learning=machine_learning:main'
+    #        ]
+    #    }
 )

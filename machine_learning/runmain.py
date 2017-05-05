@@ -4,7 +4,7 @@ runmain takes and validates command line arguments and calls run method
 from argparse import ArgumentParser, FileType
 import sys
 import csv
-from driver import run
+from machine_learning.driver import run
 
 def main(args=None):
     """Main method that parses command line arguments and calls run method"""
