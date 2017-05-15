@@ -2,13 +2,16 @@
 Squared error loss class function
 HAS A Hypothesis
 1/n*nobs sum(from 1 to nobs) (hypothesis_i - y_i)^2
-in matrix form:
+in matrix form, for linear regression:
     cost_function = 1/2*nobs(X%*%THETA - Y)'%*%(X%*%THETA - Y)
+in matrix form in general:
+    cost_function = 1/2*nobs(Hypothesis - Y)'%*%(Hypothesis - Y)
 ' is the transpose operation
 %*% is matrix multiplication
 """
 from machine_learning.cost_function.cost_function import CostFunction
 from numpy import dot, ones
+
 
 class SquaredErrorLoss(CostFunction):
     """Squared error loss cost function
@@ -18,25 +21,6 @@ class SquaredErrorLoss(CostFunction):
     def __init__(self, hypothesis, targets):
         super(SquaredErrorLoss, self).__init__(hypothesis, targets)
         self.nobs = self.targets.shape[0]
-
-    def initialize_parameters(self, param_dict=None):
-        """Initializes the parameter values
-        :param param_dict A dictionary with the form parameter_name: parameter_value
-        """
-        self.hypothesis.initialize_parameters(param_dict)
-
-    def update_parameters(self, param_array):
-        """Updates parameter values
-        :param param_array A numpy array of dimension nparams x 1 consisting of
-         parameter values.
-        """
-        self.hypothesis.update_parameters(param_array)
-
-    def get_parameters(self):
-        """Gets parameter values
-        :return A nparam x 1 numpy array of parameter values
-        """
-        return self.hypothesis.get_parameters()
 
     def hypothesis_targets(self):
         """Computes the hypothesis function - targets
@@ -57,6 +41,9 @@ class SquaredErrorLoss(CostFunction):
         :returns A nparam x 1 np array of the values of the derivatives of the parameters
         """
         return 1./self.nobs*(self.hypothesis.features.T.dot(self.hypothesis_targets()))
+
+    def convergence_criteria_met(self, current_cost, new_cost, tolerance):
+        return (current_cost[0] - new_cost[0]) < tolerance
 
     def cost_function_tmp(self):
         """Computes the cost function the long way - not using hypothesis

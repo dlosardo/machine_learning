@@ -1,7 +1,9 @@
 """
 Hypothesis
+The hypothesis is a function of the inputs (aka: x, features)
 """
 from machine_learning.parameter import ParameterList
+from machine_learning.utils.exceptions import ParameterValuesNotInitialized, IncorrectMatrixDimensions
 
 class Hypothesis(object):
 
@@ -25,10 +27,27 @@ class Hypothesis(object):
         """Update parameter values
         :param param_array A numpy array of parameter values of dimension nparms x 1
         """
-        raise NotImplementedError
+        if not self.parameters_initialized():
+            raise ParameterValuesNotInitialized(
+                    "Parameter values have not yet been initialized")
+        if param_array.shape[0] != self.nparams:
+            raise IncorrectMatrixDimensions(
+                    "Parameter array needs to be %d by 1" % self.nparams)
+        for i, param in enumerate(self.parameter_list.parameter_list):
+            param.value = param_array[i][0]
 
     def get_parameters(self):
-        raise NotImplementedError
+        """
+        Reshapes parameters into form suitable for later computation.
+        First horizontally stacks all parameter values
+        Next reshapes into an array of dimension number of parameters by 1.
+        :returns A numpy array of dimension number of nparams by 1
+         containing the values of the parameters.
+        """
+        if not self.parameters_initialized():
+            raise ParameterValuesNotInitialized(
+                    "Parameter values have not yet been initialized")
+        return self.parameter_list.get_parameters()
 
-    def hypothesis_function(self, features):
+    def hypothesis_function(self):
         raise NotImplementedError

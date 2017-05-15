@@ -67,6 +67,8 @@ def run(input_data_file):
     #hypo.initialize_parameters(param_values)
     # cost function object
     sel = SquaredErrorLoss(hypo, yvalues)
-    gd = GradientDescent(.0001, .000000001, sel)
+    tolerance = .000000001
+    learning_rate = .0001
+    gd = GradientDescent(learning_rate=learning_rate, cost_function=sel, tolerance=tolerance)
     gd.algorithm()
     print(gd.get_parameters())

@@ -1,22 +1,21 @@
 """
-Gradient Descent ML Algorithm
+Perceptron Learning ML Algorithm
 IS A SupervisedAlgorithm
 """
 from machine_learning.algorithm.supervised_algorithm import SupervisedAlgorithm
 
 
-class GradientDescent(SupervisedAlgorithm):
-    """Constructor for GradientDescent
+class StochasticGradientDescent(SupervisedAlgorithm):
+    """Constructor for PerceptronLearning
     :param learning_rate A float value representing the learning rate
-    :param param_starting_values A dict of the form parameter_name: parameter_value
-    :tolerance A float value representing the tolerance value used to inform convergence specifications
     :cost_function A CostFunction object, e.g., SquaredErrorLoss
+    :param param_starting_values A dict of the form parameter_name: parameter_value
     """
     def __init__(self, learning_rate, cost_function, tolerance=None, param_starting_values=None):
-        super(GradientDescent, self).__init__()
+        super(StochasticGradientDescent, self).__init__()
         self.learning_rate = learning_rate
-        self.tolerance = tolerance
         self.cost_function = cost_function
+        self.tolerance = tolerance
         self.param_starting_values = param_starting_values
         self.nobs = self.cost_function.nobs
         self.current_cost = None
@@ -41,8 +40,11 @@ class GradientDescent(SupervisedAlgorithm):
         4. Compute new cost using new parameter estimates
         """
         self.current_cost = self.cost_function.cost_function()
-        updated_params = self.get_parameters() - self.learning_rate*self.cost_function.cost_function_derivative()
-        self.cost_function.update_parameters(updated_params)
+        print(self.get_parameters())
+        for i in range(0, self.nobs):
+            updated_params = self.get_parameters() + self.learning_rate*self.cost_function.cost_function_derivative(i)
+            self.cost_function.update_parameters(updated_params)
+        print(self.get_parameters())
         self.new_cost = self.cost_function.cost_function()
 
     def algorithm(self):
@@ -54,7 +56,8 @@ class GradientDescent(SupervisedAlgorithm):
             self.iterate()
             if self.iter % 100000 == 0:
                 print("iter: {}".format(self.iter))
-                #print("cost function diff: {}".format(self.current_cost[0] - self.new_cost[0]))
+                #print("number errors: {}".format(self.number_errors))
             if (self.cost_function.convergence_criteria_met(self.current_cost, self.new_cost, self.tolerance)):
                 break
             self.iter = self.iter + 1
+

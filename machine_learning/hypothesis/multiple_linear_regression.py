@@ -44,34 +44,6 @@ class MultipleLinearRegression(Hypothesis):
          # consisting of 1s and the next columns consisting of x values.
         self.features = append(ones(self.features.shape[0]).reshape(self.features.shape[0], 1), self.features, 1)
 
-    def update_parameters(self, param_array):
-        """
-        Updates parameter values
-        :param_array A list of parameter values including intercept and slopes
-         of dimension nparam x 1
-        """
-        if not self.parameters_initialized():
-            raise ParameterValuesNotInitialized(
-                    "Parameter values have not yet been initialized")
-        if param_array.shape[0] != self.nparams:
-            raise IncorrectMatrixDimensions(
-                    "Parameter array needs to be %d by 1" % self.nparams)
-        for i, param in enumerate(self.parameter_list.parameter_list):
-            param.value = param_array[i][0]
-
-    def get_parameters(self):
-        """
-        Reshapes parameters into form suitable for later computation.
-        First horizontally stacks all parameter values
-        Next reshapes into an array of dimension number of parameters by 1.
-        :returns A numpy array of dimension number of nparams by 1
-         containing the values of the parameters.
-        """
-        if not self.parameters_initialized():
-            raise ParameterValuesNotInitialized(
-                    "Parameter values have not yet been initialized")
-        return self.parameter_list.get_parameters()
-
     def hypothesis_function(self):
         """
         Computes the hypothesis function.
@@ -81,14 +53,3 @@ class MultipleLinearRegression(Hypothesis):
          hypothesis computation.
         """
         return self.features.dot(self.get_parameters())
-
-
-class IncorrectMatrixDimensions(Exception):
-    """
-    Exception when incorrect matrix dimensions are found
-    """
-
-class ParameterValuesNotInitialized(Exception):
-    """
-    Exception when parameter values are not initialized
-    """
