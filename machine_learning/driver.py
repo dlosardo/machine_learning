@@ -1,24 +1,23 @@
-# driver for machine_learning
+# command line driver for machine_learning
 
 # Set up
 
-# Hypothesis: methods: get_parameters, hypothesis_function(features)
+# Hypothesis: hypothesis_function(features)
 #         |
 #         V
-# SimpleLinearRegression(intercept, slope)
+# SimpleLinearRegression -> parameters intercept, slope
 
 
 # MachineLearningAlgorithm
 #         |
 #         V
-#  SupervisedAlgorithm(features, yvalues)
+#  SupervisedAlgorithm(CostFunction)
 #         |
 #         V
-#  GradientDescent(learning_rate, CostFunction, Hypothesis)
-#                 methods: parameter_derivatives, iterate
+#  GradientDescent(learning_rate, CostFunction)
 
 
-# CostFunction(hypothesis, features, yvalues)
+# CostFunction(hypothesis, targets)
 #        |
 #        V
 #  SquaredErrorLoss: methods: cost_function, cost_function_derivative
@@ -28,47 +27,54 @@
 #run.py --input-data-file "data/input/ex1data1.txt"
 
 import numpy as np
-from machine_learning.hypothesis.simple_linear_regression import SimpleLinearRegression
-from machine_learning.cost_function.squared_error_loss import SquaredErrorLoss
-from machine_learning.algorithm.gradient_descent import GradientDescent
-
+from machine_learning.factories import HypothesisFactory, CostFunctionFactory, AlgorithmFactory
 import machine_learning.utils.utils
 
 def get_input_data(input_data_file):
     data = np.genfromtxt(input_data_file, dtype=float, delimiter = ',')
     return data
 
-#def extract_data()
+def extract_data(data, number_features, number_targets):
+    # extract features
+    features = data[:, 0:number_features]
+    # reshape to dimension nobs x nfeatures
+    features = features.reshape((len(features), number_features))
+    # extract targets
+    targets = data[:, number_features:(number_features + number_targets)]
+    # reshape to dimension nobs x 1
+    targets = targets.reshape((len(targets), number_targets))
+    return features, targets
 
-def run(input_data_file):
+
+def set_hypothesis(hypothesis_name, features, **kwargs):
+    hypothesis_object = HypothesisFactory.get_hypothesis_by_name(hypothesis_name, features, **kwargs)
+    return hypothesis_object
+
+def set_cost_function(cost_function_name, hypothesis, targets, **kwargs):
+    cost_function_object = CostFunctionFactory.get_cost_function_by_name(
+            cost_function_name, hypothesis, targets, **kwargs)
+    return cost_function_object
+
+def set_algorithm(algorithm_name, cost_function, learning_rate=1, tolerance=None
+        , starting_parameter_values=None, **kwargs):
+    algorithm_object = AlgorithmFactory.get_algorithm_by_name(algorithm_name
+            , cost_function=cost_function, learning_rate=learning_rate
+            , tolerance=tolerance, starting_parameter_values=starting_parameter_values
+            , **kwargs)
+    return algorithm_object
+
+def run(input_data_file, number_features, number_targets, hypothesis_name, cost_function_name, algorithm_name
+        , learning_rate=1, tolerance=None, starting_parameter_values=None):
     """
     """
-    # parameter values
-    intercept = 0.
-    slope = 0.
-    param_values = {"intercept": intercept,
-            "slope": slope}
-
-    # name of file where data is stored
-    #file_name = 'data/input/ex1data1.txt'
     # read in data
     data = get_input_data(input_data_file)
-    # extract features
-    features = data[:, 0]
-    # reshape to dimension nobs x 1
-    features = features.reshape((len(features), 1))
-    # extract yvalues
-    yvalues = data[:, 1]
-    # reshape to dimension nobs x 1
-    yvalues = yvalues.reshape((len(yvalues), 1))
-
-    # hypothesis object
-    hypo = SimpleLinearRegression(features)
-    #hypo.initialize_parameters(param_values)
-    # cost function object
-    sel = SquaredErrorLoss(hypo, yvalues)
-    tolerance = .000000001
-    learning_rate = .0001
-    gd = GradientDescent(learning_rate=learning_rate, cost_function=sel, tolerance=tolerance)
-    gd.algorithm()
-    print(gd.get_parameters())
+    features, targets = extract_data(data, number_features, number_targets)
+    # set hypothesis, cost function, and algorithm
+    hypo = set_hypothesis(hypothesis_name, features)
+    cost_fnx = set_cost_function(cost_function_name, hypo, targets)
+    algo = set_algorithm(algorithm_name, cost_fnx, learning_rate, tolerance
+            , starting_parameter_values)
+    # run algorithm
+    algo.algorithm()
+    print(algo.get_parameters())

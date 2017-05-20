@@ -30,7 +30,7 @@ class Hypothesis(object):
         if not self.parameters_initialized():
             raise ParameterValuesNotInitialized(
                     "Parameter values have not yet been initialized")
-        if param_array.shape[0] != self.nparams:
+        if (param_array.shape[0] != self.nparams | len(param_array.shape) != 2 | param_array[1] != 1):
             raise IncorrectMatrixDimensions(
                     "Parameter array needs to be %d by 1" % self.nparams)
         for i, param in enumerate(self.parameter_list.parameter_list):

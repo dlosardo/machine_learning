@@ -49,7 +49,7 @@ class SimpleLinearRegression(Hypothesis):
         if not self.parameters_initialized():
             raise ParameterValuesNotInitialized(
                     "Parameter values have not yet been initialized")
-        if param_array.shape[0] != self.nparams:
+        if (param_array.shape[0] != self.nparams or len(param_array.shape) != 2 or param_array.shape[1] != 1):
             raise IncorrectMatrixDimensions(
                     "Parameter array needs to be %d by 1" % self.nparams)
         self.parameter_list.get_parameter_by_name("intercept").value = param_array[0][0]

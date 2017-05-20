@@ -12,11 +12,11 @@ class GradientDescent(SupervisedAlgorithm):
     :tolerance A float value representing the tolerance value used to inform convergence specifications
     :cost_function A CostFunction object, e.g., SquaredErrorLoss
     """
-    def __init__(self, learning_rate, cost_function, tolerance=None, param_starting_values=None):
+    def __init__(self, cost_function, learning_rate, tolerance=None, param_starting_values=None):
         super(GradientDescent, self).__init__()
         self.learning_rate = learning_rate
-        self.tolerance = tolerance
         self.cost_function = cost_function
+        self.tolerance = tolerance
         self.param_starting_values = param_starting_values
         self.nobs = self.cost_function.nobs
         self.current_cost = None
