@@ -22,5 +22,4 @@ class PerceptronBatchCost(PerceptronCost):
         return -1. * (1./(2.*self.nobs))*(error_matrix.T).dot(self.hypothesis.features).T
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
-        print(new_cost)
         return new_cost <= tolerance

@@ -34,16 +34,7 @@ class GradientDescent(SupervisedAlgorithm):
         return self.cost_function.get_parameters()
 
     def iterate(self):
-        """One iteration step
-        1. Set the current cost to the calculation of the cost function using the current parameter estimates
-        2. Calculate updated parameter estimates
-        3. Update parameter estimates
-        4. Compute new cost using new parameter estimates
-        """
-        self.current_cost = self.cost_function.cost_function()
-        updated_params = self.get_parameters() - self.learning_rate*self.cost_function.cost_function_derivative()
-        self.cost_function.update_parameters(updated_params)
-        self.new_cost = self.cost_function.cost_function()
+        raise NotImplementedError
 
     def algorithm(self):
         """Run the algorithm
@@ -54,7 +45,6 @@ class GradientDescent(SupervisedAlgorithm):
             self.iterate()
             if self.iter % 100000 == 0:
                 print("iter: {}".format(self.iter))
-                #print("cost function diff: {}".format(self.current_cost[0] - self.new_cost[0]))
             if (self.cost_function.convergence_criteria_met(self.current_cost, self.new_cost, self.tolerance)):
                 break
             self.iter = self.iter + 1
