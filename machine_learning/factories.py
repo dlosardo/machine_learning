@@ -1,7 +1,7 @@
 from enum import Enum
 from machine_learning.hypothesis import simple_linear_regression, multiple_linear_regression, perceptron
 from machine_learning.cost_function import squared_error_loss, perceptron_batch_cost, perceptron_online_cost
-from machine_learning.algorithm import gradient_descent, stochastic_gradient_descent
+from machine_learning.algorithm import batch_gradient_descent, stochastic_gradient_descent
 
 
 class HypothesisTypes(Enum):
@@ -54,7 +54,7 @@ class CostFunctionFactory(object):
 
 
 class AlgorithmTypes(Enum):
-    GRADIENT_DESCENT = 1
+    BATCH_GRADIENT_DESCENT = 1
     STOCHASTIC_GRADIENT_DESCENT = 2
 
 
@@ -62,8 +62,8 @@ class AlgorithmFactory(object):
 
     @staticmethod
     def get_algorithm_by_name(algorithm_name, cost_function, learning_rate, tolerance, starting_parameter_values, **kwargs):
-        if algorithm_name == "gradient_descent":
-            return gradient_descent.GradientDescent(cost_function, learning_rate, tolerance, starting_parameter_values, **kwargs)
+        if algorithm_name == "batch_gradient_descent":
+            return batch_gradient_descent.BatchGradientDescent(cost_function, learning_rate, tolerance, starting_parameter_values, **kwargs)
         elif algorithm_name == "stochastic_gradient_descent":
             return stochastic_gradient_descent.StochasticGradientDescent(cost_function, learning_rate, tolerance, starting_parameter_values, **kwarg)
         else:
