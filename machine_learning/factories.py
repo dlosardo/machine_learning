@@ -1,13 +1,14 @@
 from enum import Enum
-from machine_learning.hypothesis import simple_linear_regression, multiple_linear_regression, perceptron
-from machine_learning.cost_function import squared_error_loss, perceptron_batch_cost, perceptron_online_cost
+from machine_learning.hypothesis import simple_linear_regression, multiple_linear_regression, logistic_regression, perceptron
+from machine_learning.cost_function import squared_error_loss, logistic_regression_cost, perceptron_batch_cost, perceptron_online_cost
 from machine_learning.algorithm import batch_gradient_descent, stochastic_gradient_descent
 
 
 class HypothesisTypes(Enum):
     SIMPLE_LINEAR_REGRESSION = 1
     MULTIPLE_LINEAR_REGRESSION = 2
-    PERCEPTRON = 3
+    LOGISTIC_REGRESSION = 3
+    PERCEPTRON = 4
 
 
 class HypothesisFactory(object):
@@ -18,6 +19,8 @@ class HypothesisFactory(object):
             return simple_linear_regression.SimpleLinearRegression(features, **kwargs)
         elif n == HypothesisTypes.MULTIPLE_LINEAR_REGRESSION:
             return multiple_linear_regression.MultipleLinearRegression(features, **kwargs)
+        elif n == HypothesisTypes.LOGISTIC_REGRESSION:
+            return logistic_regression.LogisticRegression(features, **kwargs)
         elif n == HypothesisTypes.PERCEPTRON:
             return perceptron.Perceptron(features, **kwargs)
 
@@ -27,6 +30,8 @@ class HypothesisFactory(object):
             return HypothesisFactory.get_hypothesis(HypothesisTypes.SIMPLE_LINEAR_REGRESSION, features, **kwargs)
         elif hypothesis_name == "multiple_linear_regression":
             return HypothesisFactory.get_hypothesis(HypothesisTypes.MULTIPLE_LINEAR_REGRESSION, features, **kwargs)
+        elif hypothesis_name == "logistic_regression":
+            return HypothesisFactory.get_hypothesis(HypothesisTypes.LOGISTIC_REGRESSION, features, **kwargs)
         elif hypothesis_name == "perceptron":
             return HypothesisFactory.get_hypothesis(HypothesisTypes.PERCEPTRON, features, **kwargs)
         else:
@@ -35,8 +40,9 @@ class HypothesisFactory(object):
 
 class CostFunctionTypes(Enum):
     SQUARED_ERROR_LOSS = 1
-    PERCEPTRON_BATCH_COST = 2
-    PERCEPTRON_ONLINE_COST = 3
+    LOGISTIC_REGRESSION_COST = 2
+    PERCEPTRON_BATCH_COST = 3
+    PERCEPTRON_ONLINE_COST = 4
 
 
 class CostFunctionFactory(object):
@@ -45,6 +51,8 @@ class CostFunctionFactory(object):
     def get_cost_function_by_name(cost_function_name, hypothesis, targets, **kwargs):
         if cost_function_name == "squared_error_loss":
             return squared_error_loss.SquaredErrorLoss(hypothesis, targets, **kwargs)
+        if cost_function_name == "logistic_regression_cost":
+            return logistic_regression_cost.LogisticRegressionCost(hypothesis, targets, **kwargs)
         elif cost_function_name == "perceptron_batch_cost":
             return perceptron_batch_cost.PerceptronBatchCost(hypothesis, targets, **kwargs)
         elif cost_function_name == "perceptron_online_cost":
