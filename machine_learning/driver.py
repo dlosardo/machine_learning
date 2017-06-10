@@ -85,3 +85,4 @@ def run(input_data_file, number_features, number_targets, hypothesis_name, cost_
     # run algorithm
     algo.algorithm()
     print(algo.get_parameters())
+    return algo.get_parameters()

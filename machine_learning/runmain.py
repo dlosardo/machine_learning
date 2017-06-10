@@ -14,6 +14,8 @@ def main(args=None):
     """Main method that parses command line arguments and calls run method"""
     if args is None:
         args = sys.argv[1: ]
+    else:
+        print(args)
     parser = ArgumentParser(description="Run a Machine Learning algorithm using command line arguments")
     parser.add_argument(
         '--input-data-file', type=FileType('r'), required=True,
@@ -59,3 +61,4 @@ def main(args=None):
         , options.learning_rate
         , options.tolerance
         , options.starting_parameter_values_file)
+    return output
