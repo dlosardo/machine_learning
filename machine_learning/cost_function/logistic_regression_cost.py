@@ -8,7 +8,7 @@ in matrix form:
 %*% is matrix multiplication
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import dot, ones, log
+from numpy import dot, ones, log, diag
 
 
 class LogisticRegressionCost(CostFunction):
@@ -38,6 +38,13 @@ class LogisticRegressionCost(CostFunction):
         """
         return 1./self.nobs*(self.hypothesis.features.T.dot(
             self.hypothesis.hypothesis_function() - self.targets))
+
+    def cost_function_second_derivative(self):
+        """The second derivative of the cost function for all params
+        :returns A nparam x nparam np array of the values of the 2nd derivatives of the parameters
+        """
+        return -1./self.nobs * self.hypothesis.features.T.dot(diag(diag(self.hypothesis.hypothesis_function() * (
+            1. - self.hypothesis.hypothesis_function())[:,0]))).dot(self.hypothesis.features)
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
         return (current_cost[0] - new_cost[0]) < tolerance

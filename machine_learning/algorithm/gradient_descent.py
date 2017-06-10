@@ -8,30 +8,24 @@ from machine_learning.algorithm.supervised_algorithm import SupervisedAlgorithm
 class GradientDescent(SupervisedAlgorithm):
     """Constructor for GradientDescent
     :param learning_rate A float value representing the learning rate
-    :param param_starting_values A dict of the form parameter_name: parameter_value
-    :tolerance A float value representing the tolerance value used to inform convergence specifications
-    :cost_function A CostFunction object, e.g., SquaredErrorLoss
+    :param tolerance A float value representing the tolerance value used to inform convergence specifications
     """
-    def __init__(self, cost_function, learning_rate, tolerance=None, param_starting_values=None):
-        super(GradientDescent, self).__init__()
-        self.learning_rate = learning_rate
-        self.cost_function = cost_function
-        self.tolerance = tolerance
-        self.param_starting_values = param_starting_values
-        self.nobs = self.cost_function.nobs
+    def __init__(self, cost_function, learning_rate=None, tolerance=None, param_starting_values=None):
+        super(GradientDescent, self).__init__(cost_function, param_starting_values)
+        if learning_rate is None:
+            self.learning_rate = 1.
+        else:
+            self.learning_rate = learning_rate
+        if tolerance is None:
+            self.tolerance = .001
+        else:
+            self.tolerance = tolerance
+        self.reset()
+
+    def reset(self):
         self.current_cost = None
         self.new_cost = None
         self.iter = 0
-
-    def initialize_parameters(self):
-        """Initialize parameters
-        """
-        self.cost_function.initialize_parameters(self.param_starting_values)
-
-    def get_parameters(self):
-        """Return parameters
-        """
-        return self.cost_function.get_parameters()
 
     def iterate(self):
         raise NotImplementedError

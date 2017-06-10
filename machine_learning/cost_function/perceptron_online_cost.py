@@ -1,3 +1,15 @@
+"""
+cost is number of errors made calculated as:
+J(weights) = targets - hypothesis(weights)
+number_errors = sum(abs(J(weights)))
+cost is defined as:
+derivative of weights wrt parameters:
+(targets(i) - hypothesis(i)) %*% features(i)
+note that this is calculated across the observations one by one
+and each time the weights are updated. This means that ordering
+the inputs differently may lead to different results.
+"""
+
 from numpy import dot, sum, abs
 from machine_learning.cost_function.perceptron_cost import PerceptronCost
 from machine_learning.learning_type import LearningTypes

@@ -1,3 +1,10 @@
+"""
+cost is ERROR_MATRIX * FEATURES / nobs
+where ERROR_MATRIX is calculated as:
+ERROR_MATRIX = targets - hypothesis(weights)
+and the length of the costs matrix is the actual cost
+"""
+
 from numpy import dot
 from numpy.linalg import norm
 from machine_learning.cost_function.perceptron_cost import PerceptronCost

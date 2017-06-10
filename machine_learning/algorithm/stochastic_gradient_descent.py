@@ -5,9 +5,6 @@ from machine_learning.algorithm.gradient_descent import GradientDescent
 
 class StochasticGradientDescent(GradientDescent):
     """Constructor
-    :param learning_rate A float value representing the learning rate
-    :cost_function A CostFunction object, e.g., SquaredErrorLoss
-    :param param_starting_values A dict of the form parameter_name: parameter_value
     """
     def __init__(self, cost_function, learning_rate, tolerance=None, param_starting_values=None):
         super(StochasticGradientDescent, self).__init__(cost_function, learning_rate

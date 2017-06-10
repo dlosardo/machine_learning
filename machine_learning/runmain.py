@@ -2,9 +2,13 @@
 runmain takes and validates command line arguments and calls run method
 """
 from argparse import ArgumentParser, FileType
-import sys
-import csv
+import sys, csv
+from machine_learning.factories import HypothesisTypes, CostFunctionTypes, AlgorithmTypes
 from machine_learning.driver import run
+
+hypothesis_choices=[hypothesis_type.name.lower() for hypothesis_type in list(HypothesisTypes)]
+cost_function_choices=[cost_function_type.name.lower() for cost_function_type in list(CostFunctionTypes)]
+algorithm_choices=[algorithm_type.name.lower() for algorithm_type in list(AlgorithmTypes)]
 
 def main(args=None):
     """Main method that parses command line arguments and calls run method"""
@@ -16,28 +20,34 @@ def main(args=None):
         dest='input_data_file', help='csv file for input data')
     parser.add_argument(
         '--number-features', type=int, required=True,
-        dest='number_features', help='number of features in input dataset')
+        dest='number_features', help='An integer representing number of features in input dataset')
     parser.add_argument(
         '--number-targets', type=int, required=True,
-        dest='number_targets', help='number of targets in input dataset')
+        dest='number_targets', help='An integer representing number of targets in input dataset')
     parser.add_argument(
         '--hypothesis-name', type=str, required=True,
-        dest='hypothesis_name', help='Can be one of:')
+        choices=hypothesis_choices,
+        dest='hypothesis_name', help='Can be one of: {}'.format(", ".join(hypothesis_choices)))
     parser.add_argument(
         '--cost-function-name', type=str, required=True,
-        dest='cost_function_name', help='Can be one of:')
+        choices=cost_function_choices,
+        dest='cost_function_name', help='Can be one of: {}'.format(", ".join(cost_function_choices)))
     parser.add_argument(
         '--algorithm-name', type=str, required=True,
-        dest='algorithm_name', help='Can be one of:')
+        choices=algorithm_choices,
+        dest='algorithm_name', help='Can be one of: {}'.format(", ".join(algorithm_choices)))
     parser.add_argument(
         '--tolerance', type=float, required=False,
-        dest='tolerance', help='Can be one of:')
+        default = None,
+        dest='tolerance', help='A float value representing the tolerance for stopping criteria of an algorithm')
     parser.add_argument(
         '--learning-rate', type=float, required=False,
-        dest='learning_rate', help='Can be one of:')
+        default = None,
+        dest='learning_rate', help='A float value representing the learning rate of an algorithm')
     parser.add_argument(
         '--starting-parameter-values-file', type=FileType('r'), required=False,
-        dest='starting_parameter_values_file', help='Can be one of:')
+        default=None,
+        dest='starting_parameter_values_file', help='A filename containing starting values for parameters')
     options = parser.parse_args(args)
     output = run(
         options.input_data_file

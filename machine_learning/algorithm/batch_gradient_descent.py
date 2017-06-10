@@ -1,16 +1,12 @@
 """
-Gradient Descent ML Algorithm
-IS A SupervisedAlgorithm
+Batch Gradient Descent ML Algorithm
+IS A SupervisedAlgorithm and GradientDescent
 """
 from machine_learning.algorithm.gradient_descent import GradientDescent
 
 
 class BatchGradientDescent(GradientDescent):
     """Constructor for GradientDescent
-    :param learning_rate A float value representing the learning rate
-    :param param_starting_values A dict of the form parameter_name: parameter_value
-    :tolerance A float value representing the tolerance value used to inform convergence specifications
-    :cost_function A CostFunction object, e.g., SquaredErrorLoss
     """
     def __init__(self, cost_function, learning_rate, tolerance=None, param_starting_values=None):
         super(BatchGradientDescent, self).__init__(cost_function, learning_rate

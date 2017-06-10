@@ -2,15 +2,10 @@
 Perceptron cost function class
 HAS A Hypothesis
 
-cost is number of errors made calculated as:
+error matrix:
 J(weights) = targets - hypothesis(weights)
 number_errors = sum(abs(J(weights)))
 
-derivative of weights wrt parameters:
-(targets(i) - hypothesis(i)) %*% features(i)
-note that this is calculated across the observations one by one
-and each time the weights are updated. This means that ordering
-the inputs differently may lead to different results.
 """
 from machine_learning.cost_function.cost_function import CostFunction
 

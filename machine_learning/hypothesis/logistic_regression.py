@@ -62,4 +62,5 @@ class LogisticRegression(Hypothesis):
         theta*features < 0 when y = 0
         theta[1:nparams]*features_no_intercept >= theta[0]*1
         """
+        #TODO: implement and plot
         pass

@@ -55,26 +55,33 @@ def set_cost_function(cost_function_name, hypothesis, targets, **kwargs):
             cost_function_name, hypothesis, targets, **kwargs)
     return cost_function_object
 
-def set_algorithm(algorithm_name, cost_function, learning_rate=1, tolerance=None
-        , starting_parameter_values=None, **kwargs):
+def set_algorithm(algorithm_name, cost_function, starting_parameter_values, **kwargs):
     algorithm_object = AlgorithmFactory.get_algorithm_by_name(algorithm_name
-            , cost_function=cost_function, learning_rate=learning_rate
-            , tolerance=tolerance, starting_parameter_values=starting_parameter_values
+            , cost_function=cost_function, starting_parameter_values=starting_parameter_values
             , **kwargs)
     return algorithm_object
 
 def run(input_data_file, number_features, number_targets, hypothesis_name, cost_function_name, algorithm_name
-        , learning_rate=1, tolerance=None, starting_parameter_values=None):
+        , learning_rate, tolerance, starting_parameter_values_file):
     """
     """
+    if starting_parameter_values_file is None:
+        starting_parameter_values = None
+    #TODO: parse file to dict
     # read in data
     data = get_input_data(input_data_file)
     features, targets = extract_data(data, number_features, number_targets)
     # set hypothesis, cost function, and algorithm
     hypo = set_hypothesis(hypothesis_name, features)
     cost_fnx = set_cost_function(cost_function_name, hypo, targets)
-    algo = set_algorithm(algorithm_name, cost_fnx, learning_rate, tolerance
-            , starting_parameter_values)
+    optional_arguments = [{"learning_rate": learning_rate}, {"tolerance": tolerance}]
+    algo_kwargs = {}
+    for optional_argument in optional_arguments:
+        for key, val in optional_argument.items():
+            if val is not None:
+                algo_kwargs.update(optional_argument)
+
+    algo = set_algorithm(algorithm_name, cost_fnx, starting_parameter_values, **algo_kwargs)
     # run algorithm
     algo.algorithm()
     print(algo.get_parameters())

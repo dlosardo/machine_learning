@@ -1,7 +1,7 @@
 from enum import Enum
 from machine_learning.hypothesis import simple_linear_regression, multiple_linear_regression, logistic_regression, perceptron
 from machine_learning.cost_function import squared_error_loss, logistic_regression_cost, perceptron_batch_cost, perceptron_online_cost
-from machine_learning.algorithm import batch_gradient_descent, stochastic_gradient_descent
+from machine_learning.algorithm import batch_gradient_descent, stochastic_gradient_descent, newton_raphson
 
 
 class HypothesisTypes(Enum):
@@ -16,24 +16,24 @@ class HypothesisFactory(object):
     @staticmethod
     def get_hypothesis(n, features, **kwargs):
         if n == HypothesisTypes.SIMPLE_LINEAR_REGRESSION:
-            return simple_linear_regression.SimpleLinearRegression(features, **kwargs)
+            return simple_linear_regression.SimpleLinearRegression(features=features, **kwargs)
         elif n == HypothesisTypes.MULTIPLE_LINEAR_REGRESSION:
-            return multiple_linear_regression.MultipleLinearRegression(features, **kwargs)
+            return multiple_linear_regression.MultipleLinearRegression(features=features, **kwargs)
         elif n == HypothesisTypes.LOGISTIC_REGRESSION:
-            return logistic_regression.LogisticRegression(features, **kwargs)
+            return logistic_regression.LogisticRegression(features=features, **kwargs)
         elif n == HypothesisTypes.PERCEPTRON:
-            return perceptron.Perceptron(features, **kwargs)
+            return perceptron.Perceptron(features=features, **kwargs)
 
     @staticmethod
     def get_hypothesis_by_name(hypothesis_name, features, **kwargs):
         if hypothesis_name == "simple_linear_regression":
-            return HypothesisFactory.get_hypothesis(HypothesisTypes.SIMPLE_LINEAR_REGRESSION, features, **kwargs)
+            return HypothesisFactory.get_hypothesis(HypothesisTypes.SIMPLE_LINEAR_REGRESSION, features=features, **kwargs)
         elif hypothesis_name == "multiple_linear_regression":
-            return HypothesisFactory.get_hypothesis(HypothesisTypes.MULTIPLE_LINEAR_REGRESSION, features, **kwargs)
+            return HypothesisFactory.get_hypothesis(HypothesisTypes.MULTIPLE_LINEAR_REGRESSION, features=features, **kwargs)
         elif hypothesis_name == "logistic_regression":
-            return HypothesisFactory.get_hypothesis(HypothesisTypes.LOGISTIC_REGRESSION, features, **kwargs)
+            return HypothesisFactory.get_hypothesis(HypothesisTypes.LOGISTIC_REGRESSION, features=features, **kwargs)
         elif hypothesis_name == "perceptron":
-            return HypothesisFactory.get_hypothesis(HypothesisTypes.PERCEPTRON, features, **kwargs)
+            return HypothesisFactory.get_hypothesis(HypothesisTypes.PERCEPTRON, features=features, **kwargs)
         else:
             raise ValueError("Invalid hypothesis name: {}".format(hypothesis_name))
 
@@ -50,13 +50,13 @@ class CostFunctionFactory(object):
     @staticmethod
     def get_cost_function_by_name(cost_function_name, hypothesis, targets, **kwargs):
         if cost_function_name == "squared_error_loss":
-            return squared_error_loss.SquaredErrorLoss(hypothesis, targets, **kwargs)
+            return squared_error_loss.SquaredErrorLoss(hypothesis=hypothesis, targets=targets, **kwargs)
         if cost_function_name == "logistic_regression_cost":
-            return logistic_regression_cost.LogisticRegressionCost(hypothesis, targets, **kwargs)
+            return logistic_regression_cost.LogisticRegressionCost(hypothesis=hypothesis, targets=targets, **kwargs)
         elif cost_function_name == "perceptron_batch_cost":
-            return perceptron_batch_cost.PerceptronBatchCost(hypothesis, targets, **kwargs)
+            return perceptron_batch_cost.PerceptronBatchCost(hypothesis=hypothesis, targets=targets, **kwargs)
         elif cost_function_name == "perceptron_online_cost":
-            return perceptron_online_cost.PerceptronOnlineCost(hypothesis, targets, **kwargs)
+            return perceptron_online_cost.PerceptronOnlineCost(hypothesis=hypothesis, targets=targets, **kwargs)
         else:
             raise ValueError("Invalid cost function name: {}".format(cost_function_name))
 
@@ -64,15 +64,18 @@ class CostFunctionFactory(object):
 class AlgorithmTypes(Enum):
     BATCH_GRADIENT_DESCENT = 1
     STOCHASTIC_GRADIENT_DESCENT = 2
+    NEWTON_RAPHSON = 3
 
 
 class AlgorithmFactory(object):
 
     @staticmethod
-    def get_algorithm_by_name(algorithm_name, cost_function, learning_rate, tolerance, starting_parameter_values, **kwargs):
+    def get_algorithm_by_name(algorithm_name, cost_function, starting_parameter_values, **kwargs):
         if algorithm_name == "batch_gradient_descent":
-            return batch_gradient_descent.BatchGradientDescent(cost_function, learning_rate, tolerance, starting_parameter_values, **kwargs)
+            return batch_gradient_descent.BatchGradientDescent(cost_function=cost_function, param_starting_values=starting_parameter_values, **kwargs)
         elif algorithm_name == "stochastic_gradient_descent":
-            return stochastic_gradient_descent.StochasticGradientDescent(cost_function, learning_rate, tolerance, starting_parameter_values, **kwarg)
+            return stochastic_gradient_descent.StochasticGradientDescent(cost_function=cost_function, param_starting_values=starting_parameter_values, **kwargs)
+        elif algorithm_name == "newton_raphson":
+            return newton_raphson.NewtonRaphson(cost_function=cost_function, param_starting_values=starting_parameter_values, **kwargs)
         else:
             raise ValueError("Invalid algorithm name: {}".format(algorithm_name))
