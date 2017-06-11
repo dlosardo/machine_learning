@@ -15,7 +15,7 @@ Matrix form:
 """
 
 from machine_learning.hypothesis.hypothesis import Hypothesis
-from machine_learning.parameter import Parameter, ParameterList
+from machine_learning.model_utils.parameter import Parameter, ParameterList
 from numpy import ndarray, array, dot, hstack, reshape, append, ones
 
 

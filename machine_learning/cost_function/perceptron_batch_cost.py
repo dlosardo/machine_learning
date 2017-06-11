@@ -8,7 +8,7 @@ and the length of the costs matrix is the actual cost
 from numpy import dot
 from numpy.linalg import norm
 from machine_learning.cost_function.perceptron_cost import PerceptronCost
-from machine_learning.learning_type import LearningTypes
+from machine_learning.model_utils.learning_type import LearningTypes
 
 
 class PerceptronBatchCost(PerceptronCost):

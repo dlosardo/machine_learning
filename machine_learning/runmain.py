@@ -3,8 +3,8 @@ runmain takes and validates command line arguments and calls run method
 """
 from argparse import ArgumentParser, FileType
 import sys, csv
-from machine_learning.factories import HypothesisTypes, CostFunctionTypes, AlgorithmTypes
-from machine_learning.driver import run
+from machine_learning.model_utils.factories import HypothesisTypes, CostFunctionTypes, AlgorithmTypes
+from machine_learning.driver.command_line_driver import run
 
 hypothesis_choices=[hypothesis_type.name.lower() for hypothesis_type in list(HypothesisTypes)]
 cost_function_choices=[cost_function_type.name.lower() for cost_function_type in list(CostFunctionTypes)]

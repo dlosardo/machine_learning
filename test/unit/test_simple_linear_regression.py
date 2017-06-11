@@ -5,7 +5,7 @@ Unit Tests for simple linear regression class
 from nose.tools import assert_raises, assert_is_instance, assert_equals
 from machine_learning.hypothesis.simple_linear_regression import SimpleLinearRegression
 from machine_learning.utils.exceptions import IncorrectMatrixDimensions, ParameterValuesNotInitialized
-from machine_learning.parameter import Parameter
+from machine_learning.model_utils.parameter import Parameter
 from numpy import array
 
 INTERCEPT_VALUE = 0.

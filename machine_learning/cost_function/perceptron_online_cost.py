@@ -12,7 +12,7 @@ the inputs differently may lead to different results.
 
 from numpy import dot, sum, abs
 from machine_learning.cost_function.perceptron_cost import PerceptronCost
-from machine_learning.learning_type import LearningTypes
+from machine_learning.model_utils.learning_type import LearningTypes
 
 
 class PerceptronOnlineCost(PerceptronCost):

@@ -14,9 +14,9 @@ Matrix form:
     where %*% is matrix multiplication, X is a matrix of dimension
     nobs x nparams, and THETA is a matrix of dimension nparms x 1
 """
-from numpy import ndarray, array, dot, hstack, reshape, append, ones
+from numpy import dot, hstack, reshape, append, ones
 from machine_learning.hypothesis.hypothesis import Hypothesis
-from machine_learning.parameter import Parameter, ParameterList
+from machine_learning.model_utils.parameter import Parameter, ParameterList
 from machine_learning.utils.exceptions import IncorrectMatrixDimensions, ParameterValuesNotInitialized
 
 class SimpleLinearRegression(Hypothesis):

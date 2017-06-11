@@ -5,7 +5,7 @@ Perceptron is a Hypothesis
 """
 from numpy import append, ones
 from machine_learning.hypothesis.hypothesis import Hypothesis
-from machine_learning.parameter import Parameter, ParameterList
+from machine_learning.model_utils.parameter import Parameter, ParameterList
 from machine_learning.utils.exceptions import IncorrectMatrixDimensions
 
 

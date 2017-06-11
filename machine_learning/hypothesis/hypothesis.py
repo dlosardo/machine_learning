@@ -2,7 +2,7 @@
 Hypothesis
 The hypothesis is a function of the inputs (aka: x, features)
 """
-from machine_learning.parameter import ParameterList
+from machine_learning.model_utils.parameter import ParameterList
 from machine_learning.utils.exceptions import ParameterValuesNotInitialized, IncorrectMatrixDimensions
 
 class Hypothesis(object):

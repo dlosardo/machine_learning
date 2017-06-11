@@ -27,7 +27,7 @@
 #run.py --input-data-file "data/input/ex1data1.txt"
 
 import numpy as np
-from machine_learning.factories import HypothesisFactory, CostFunctionFactory, AlgorithmFactory
+from machine_learning.model_utils.factories import HypothesisFactory, CostFunctionFactory, AlgorithmFactory
 import machine_learning.utils.utils
 
 def get_input_data(input_data_file):

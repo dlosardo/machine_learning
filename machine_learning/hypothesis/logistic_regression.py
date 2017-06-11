@@ -15,8 +15,8 @@ Matrix form:
 """
 
 from machine_learning.hypothesis.hypothesis import Hypothesis
-from machine_learning.parameter import Parameter, ParameterList
-from numpy import ndarray, array, dot, hstack, reshape, append, ones, exp
+from machine_learning.model_utils.parameter import Parameter, ParameterList
+from numpy import dot, reshape, append, ones, exp
 
 
 class LogisticRegression(Hypothesis):
