@@ -14,7 +14,6 @@ class SupervisedAlgorithm(MachineLearningAlgorithm):
         self.param_starting_values = param_starting_values
         self.nobs = self.cost_function.nobs
 
-
     def initialize_parameters(self):
         """Initialize parameters
         """

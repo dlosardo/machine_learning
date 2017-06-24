@@ -31,11 +31,7 @@ class MultipleLinearRegression(Hypothesis):
         :param features A nobs x nx numpy array of feature values
         """
         self.nparams = features.shape[1] + 1
-        self.intercept = Parameter(name="intercept", value=None, default_starting_value=0.)
-        self.parameter_list.add_parameter(self.intercept)
-        for i in range(0, features.shape[1]):
-            tmp_slope = Parameter(name="slope_{}".format(i), value=None, default_starting_value=0.)
-            self.parameter_list.add_parameter(tmp_slope)
+        self.set_parameters()
         if self.features.shape[1] != self.nparams - 1:
             raise IncorrectMatrixDimensions(
                 "Number of columns is equal to %d but should be equal to %d" % self.features.shape[1], self.nparams - 1)
@@ -43,6 +39,18 @@ class MultipleLinearRegression(Hypothesis):
         # self.features becomes a matrix of dimension nobs x nx with the first column
          # consisting of 1s and the next columns consisting of x values.
         self.features = append(ones(self.features.shape[0]).reshape(self.features.shape[0], 1), self.features, 1)
+
+    def set_parameters(self):
+        self.intercept = Parameter(name="intercept", value=None, default_starting_value=0.)
+        self.parameter_list.add_parameter(self.intercept)
+        slope_names = []
+        for i in range(0, self.nparams - 1):
+            slope_name = "slope_{}".format(i)
+            tmp_slope = Parameter(name=slope_name, value=None, default_starting_value=0.)
+            slope_names.append(slope_name)
+            self.parameter_list.add_parameter(tmp_slope)
+        self.error_variance = Parameter(name="error_variance", value=None, default_starting_value=1.)
+        self.conditional_mean_parameter_names = ["intercept"] + slope_names
 
     def hypothesis_function(self):
         """
@@ -53,3 +61,6 @@ class MultipleLinearRegression(Hypothesis):
          hypothesis computation.
         """
         return self.features.dot(self.get_parameters())
+
+    def conditional_mean(self):
+        return self.features.dot(self.parameter_list.get_parameter_values_by_name(self.conditional_mean_parameter_names))

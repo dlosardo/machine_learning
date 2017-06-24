@@ -12,6 +12,7 @@ class CostFunction(object):
     def __init__(self, hypothesis, targets):
         self.hypothesis = hypothesis
         self.targets = targets
+        self.nobs = self.targets.shape[0]
 
     def initialize_parameters(self, param_dict=None):
         """Initializes the parameter values

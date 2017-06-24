@@ -9,8 +9,8 @@ class BatchGradientDescent(GradientDescent):
     """Constructor for GradientDescent
     """
     def __init__(self, cost_function, learning_rate, tolerance=None, param_starting_values=None):
-        super(BatchGradientDescent, self).__init__(cost_function, learning_rate
-                , tolerance, param_starting_values)
+        super(BatchGradientDescent, self).__init__(cost_function, learning_rate=learning_rate
+                , tolerance=tolerance, param_starting_values=param_starting_values)
 
     def iterate(self):
         """One iteration step

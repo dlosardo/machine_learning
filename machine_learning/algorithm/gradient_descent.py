@@ -2,10 +2,10 @@
 Gradient Descent ML Algorithm
 IS A SupervisedAlgorithm
 """
-from machine_learning.algorithm.supervised_algorithm import SupervisedAlgorithm
+from machine_learning.algorithm.iterative_supervised_algorithm import IterativeSupervisedAlgorithm
 
 
-class GradientDescent(SupervisedAlgorithm):
+class GradientDescent(IterativeSupervisedAlgorithm):
     """Constructor for GradientDescent
     :param learning_rate A float value representing the learning rate
     :param tolerance A float value representing the tolerance value used to inform convergence specifications
@@ -20,25 +20,18 @@ class GradientDescent(SupervisedAlgorithm):
             self.tolerance = .001
         else:
             self.tolerance = tolerance
-        self.reset()
+        self.current_cost = None
+        self.new_cost = None
 
     def reset(self):
         self.current_cost = None
         self.new_cost = None
         self.iter = 0
-
-    def iterate(self):
-        raise NotImplementedError
-
-    def algorithm(self):
-        """Run the algorithm
-        Call iterate until the change in the cost function is less than the specified tolerance value
-        """
+        self.converged = False
         self.initialize_parameters()
-        while (True):
-            self.iterate()
-            if self.iter % 100000 == 0:
-                print("iter: {}".format(self.iter))
-            if (self.cost_function.convergence_criteria_met(self.current_cost, self.new_cost, self.tolerance)):
-                break
-            self.iter = self.iter + 1
+
+    def convergence_criteria_met(self):
+        return self.cost_function.convergence_criteria_met(self.current_cost, self.new_cost, self.tolerance)
+
+    def convergence_value(self):
+        return self.cost_function.convergence_value(self.current_cost, self.new_cost)

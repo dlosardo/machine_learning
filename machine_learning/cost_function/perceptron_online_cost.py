@@ -39,4 +39,7 @@ class PerceptronOnlineCost(PerceptronCost):
                         self.hypothesis.nparams, 1)
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
-        return new_cost == 0
+        return self.convergence_value(current_cost, new_cost) == 0
+
+    def convergence_value(self, current_cost, new_cost):
+        return new_cost

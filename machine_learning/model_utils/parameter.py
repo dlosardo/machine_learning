@@ -105,3 +105,8 @@ class ParameterList(object):
          containing the values of the parameters.
         """
         return hstack((param.value for param in self.parameter_list)).reshape(self.size, 1)
+
+    def get_parameter_values_by_name(self, name_list):
+        parameters_tmp = [self.get_parameter_by_name(name) for name in name_list]
+        return hstack((param.value for param in parameters_tmp)).reshape(len(parameters_tmp), 1)
+

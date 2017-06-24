@@ -1,6 +1,6 @@
 from enum import Enum
 from machine_learning.hypothesis import simple_linear_regression, multiple_linear_regression, logistic_regression, perceptron
-from machine_learning.cost_function import squared_error_loss, logistic_regression_cost, perceptron_batch_cost, perceptron_online_cost
+from machine_learning.cost_function import squared_error_loss, maximum_likelihood_normal_distribution, log_loss, perceptron_batch_cost, perceptron_online_cost
 from machine_learning.algorithm import batch_gradient_descent, stochastic_gradient_descent, newton_raphson
 
 
@@ -40,9 +40,10 @@ class HypothesisFactory(object):
 
 class CostFunctionTypes(Enum):
     SQUARED_ERROR_LOSS = 1
-    LOGISTIC_REGRESSION_COST = 2
-    PERCEPTRON_BATCH_COST = 3
-    PERCEPTRON_ONLINE_COST = 4
+    MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION = 2
+    LOG_LOSS = 3
+    PERCEPTRON_BATCH_COST = 4
+    PERCEPTRON_ONLINE_COST = 5
 
 
 class CostFunctionFactory(object):
@@ -51,8 +52,10 @@ class CostFunctionFactory(object):
     def get_cost_function_by_name(cost_function_name, hypothesis, targets, **kwargs):
         if cost_function_name == "squared_error_loss":
             return squared_error_loss.SquaredErrorLoss(hypothesis=hypothesis, targets=targets, **kwargs)
-        if cost_function_name == "logistic_regression_cost":
-            return logistic_regression_cost.LogisticRegressionCost(hypothesis=hypothesis, targets=targets, **kwargs)
+        if cost_function_name == "maximum_likelihood_normal_distribution":
+            return maximum_likelihood_normal_distribution.MaximumLikelihoodNormalDistribution(hypothesis=hypothesis, targets=targets, **kwargs)
+        if cost_function_name == "log_loss":
+            return log_loss.LogLoss(hypothesis=hypothesis, targets=targets, **kwargs)
         elif cost_function_name == "perceptron_batch_cost":
             return perceptron_batch_cost.PerceptronBatchCost(hypothesis=hypothesis, targets=targets, **kwargs)
         elif cost_function_name == "perceptron_online_cost":

@@ -11,6 +11,7 @@ SIMPLE_LINEAR_REGRESSION_SLOPE = 1.1924793
 MULTIPLE_LINEAR_REGRESSION_INTERCEPT = 101.21205399
 MULTIPLE_LINEAR_REGRESSION_SLOPE_1 = 1.00059136
 MULTIPLE_LINEAR_REGRESSION_SLOPE_2 = 1.07096345
+MULTIPLE_LINEAR_REGRESSION_RESIDUAL_VARIANCE = 36.49787789
 
 LOGISTIC_REGRESSION_INTERCEPT = -0.62494949
 LOGISTIC_REGRESSION_SLOPE = 0.0128923
@@ -24,7 +25,7 @@ PERCEPTRON_BATCH_FEATURE_1 = 0.22535731
 PERCEPTRON_BATCH_FEATURE_2 = -0.1607145
 
 
-class TestSimpleLinearRegression(object):
+class TestIntegration(object):
 
     def setup(self):
         print("setup() before any methods in this class")
@@ -46,6 +47,14 @@ class TestSimpleLinearRegression(object):
         assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_1, places=4)
         assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_2, places=4)
 
+    #def test_multiple_linear_regression_maximum_likelihood_batch_gradient_descent_run(self):
+    #    inputs = ["--input-data-file", "data/input/sample_data.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", 'multiple_linear_regression', "--cost-function-name", 'maximum_likelihood_normal_distribution', "--algorithm-name", "batch_gradient_descent", "--learning-rate", "0.0001", "--tolerance", '.0000000001']
+    #    parameters = runmain.main(inputs)
+    #    assert_almost_equals(parameters[0,0], MULTIPLE_LINEAR_REGRESSION_INTERCEPT, places=1)
+    #    assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_1, places=1)
+    #    assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_2, places=1)
+    #    assert_almost_equals(parameters[3,0], MULTIPLE_LINEAR_REGRESSION_RESIDUAL_VARIANCE, places=1)
+
     def test_percetron_batch_run(self):
         inputs = ["--input-data-file", "data/input/sample_perceptron.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", "perceptron", "--cost-function-name", "perceptron_batch_cost", "--algorithm-name", "batch_gradient_descent", "--learning-rate", '1.']
         parameters = runmain.main(inputs)
@@ -61,7 +70,7 @@ class TestSimpleLinearRegression(object):
         assert_almost_equals(parameters[2,0], PERCEPTRON_ONLINE_FEATURE_2, places=4)
 
     def test_logistic_regression_newton_raphson_run(self):
-        inputs = ["--input-data-file", "data/input/sample_logistic.csv", "--number-features", '1', "--number-targets", '1', "--hypothesis-name", 'logistic_regression', "--cost-function-name", 'logistic_regression_cost', "--algorithm-name", 'newton_raphson', "--tolerance", '.0001']
+        inputs = ["--input-data-file", "data/input/sample_logistic.csv", "--number-features", '1', "--number-targets", '1', "--hypothesis-name", 'logistic_regression', "--cost-function-name", 'log_loss', "--algorithm-name", 'newton_raphson', "--tolerance", '.0001']
         parameters = runmain.main(inputs)
         assert_almost_equals(parameters[0,0], LOGISTIC_REGRESSION_INTERCEPT, places=4)
         assert_almost_equals(parameters[1,0], LOGISTIC_REGRESSION_SLOPE, places=4)

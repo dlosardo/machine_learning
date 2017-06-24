@@ -43,7 +43,10 @@ class SquaredErrorLoss(CostFunction):
         return 1./self.nobs*(self.hypothesis.features.T.dot(self.hypothesis_targets()))
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
-        return (current_cost[0] - new_cost[0]) < tolerance
+        return self.convergence_value(current_cost, new_cost) < tolerance
+
+    def convergence_value(self, current_cost, new_cost):
+        return abs(current_cost[0] - new_cost[0])
 
     def cost_function_tmp(self):
         """Computes the cost function the long way - not using hypothesis
