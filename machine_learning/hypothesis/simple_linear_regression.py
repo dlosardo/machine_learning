@@ -28,8 +28,8 @@ class SimpleLinearRegression(Hypothesis):
     def __init__(self, features):
         super(SimpleLinearRegression, self).__init__(features)
         self.nparams = self.features.shape[1] + 1
-        self.intercept = Parameter(name="intercept", value=None, default_starting_value=0.)
-        self.slope = Parameter(name="slope", value=None, default_starting_value=0.)
+        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
+        self.slope = Parameter(name="slope", value=None, variance=None, default_starting_value=0.)
         self.parameter_list.add_parameter(self.intercept)
         self.parameter_list.add_parameter(self.slope)
         if self.features.shape[1] != 1:

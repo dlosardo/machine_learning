@@ -73,12 +73,12 @@ class AlgorithmTypes(Enum):
 class AlgorithmFactory(object):
 
     @staticmethod
-    def get_algorithm_by_name(algorithm_name, cost_function, starting_parameter_values, **kwargs):
+    def get_algorithm_by_name(algorithm_name, cost_function, **kwargs):
         if algorithm_name == "batch_gradient_descent":
-            return batch_gradient_descent.BatchGradientDescent(cost_function=cost_function, param_starting_values=starting_parameter_values, **kwargs)
+            return batch_gradient_descent.BatchGradientDescent(cost_function=cost_function, **kwargs)
         elif algorithm_name == "stochastic_gradient_descent":
-            return stochastic_gradient_descent.StochasticGradientDescent(cost_function=cost_function, param_starting_values=starting_parameter_values, **kwargs)
+            return stochastic_gradient_descent.StochasticGradientDescent(cost_function=cost_function, **kwargs)
         elif algorithm_name == "newton_raphson":
-            return newton_raphson.NewtonRaphson(cost_function=cost_function, param_starting_values=starting_parameter_values, **kwargs)
+            return newton_raphson.NewtonRaphson(cost_function=cost_function, **kwargs)
         else:
             raise ValueError("Invalid algorithm name: {}".format(algorithm_name))

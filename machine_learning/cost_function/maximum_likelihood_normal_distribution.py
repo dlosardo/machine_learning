@@ -11,8 +11,10 @@ The log-likelihood is:
     l_nobs(Y|X ; THETA) = -nobs/2 * ln(sigma^2) - nobs/2 * ln(2PI) - 1/2*sigma^2 * sum(i to nobs)(Y_i - X_i%*%THETA)^2
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import log, pi, var, mean, hstack, vstack, array
+from numpy import log, pi, var, mean, hstack, vstack, array, sqrt, diag
+from numpy.linalg import inv
 
+POSSIBLE_HYPOTHESES = [2]
 
 class MaximumLikelihoodNormalDistribution(CostFunction):
     """
@@ -24,11 +26,13 @@ class MaximumLikelihoodNormalDistribution(CostFunction):
         self.hypothesis.nparams = self.hypothesis.nparams + 1
 
     def maximum_likelihood_fit_function(self):
+        #TODO: put the error variance in matrix form such that it is a diagonal matrix, in future multiple errors uncorrelated.
         conditional_mean = self.hypothesis.conditional_mean()
         ml_fit_function = log(self.error_variance.value) - log(var(self.targets)) + 1./self.error_variance.value*var(self.targets) - 1. + ((mean(self.targets) - conditional_mean)).T.dot(1./self.error_variance.value).dot((mean(self.targets) - conditional_mean))
         return ml_fit_function
 
     def cost_function_derivative(self):
+        #TODO: put the error variance in matrix form such that it is a diagonal matrix, in future multiple errors uncorrelated.
         conditional_mean = self.hypothesis.conditional_mean()
         conditional_mean_derivative = (self.hypothesis.features.T.dot(self.targets - conditional_mean))/(self.error_variance.value)
         error_variance_derivative = -1.*self.nobs/(2.*self.error_variance.value) + ((self.targets - conditional_mean).T.dot(self.targets - conditional_mean))/(2.*self.error_variance.value**2)
@@ -60,3 +64,13 @@ class MaximumLikelihoodNormalDistribution(CostFunction):
 
     def convergence_value(self, current_cost, new_cost):
         return abs(current_cost[0] - new_cost[0])
+
+    def variance_covariance_matrix(self):
+        var_cov_matrix = inv(self.cost_function_second_derivative())
+        return var_cov_matrix
+
+    def standard_errors(self):
+        return sqrt(diag(self.variance_covariance_matrix()))
+
+    def parameter_variances(self):
+        return diag(self.variance_covariance_matrix())

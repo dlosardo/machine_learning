@@ -24,7 +24,8 @@ def main(args=None):
         '--number-features', type=int, required=True,
         dest='number_features', help='An integer representing number of features in input dataset')
     parser.add_argument(
-        '--number-targets', type=int, required=True,
+        '--number-targets', type=int, required=False,
+        default = 0,
         dest='number_targets', help='An integer representing number of targets in input dataset')
     parser.add_argument(
         '--hypothesis-name', type=str, required=True,

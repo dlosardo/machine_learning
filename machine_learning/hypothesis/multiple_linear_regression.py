@@ -41,15 +41,15 @@ class MultipleLinearRegression(Hypothesis):
         self.features = append(ones(self.features.shape[0]).reshape(self.features.shape[0], 1), self.features, 1)
 
     def set_parameters(self):
-        self.intercept = Parameter(name="intercept", value=None, default_starting_value=0.)
+        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
         self.parameter_list.add_parameter(self.intercept)
         slope_names = []
         for i in range(0, self.nparams - 1):
             slope_name = "slope_{}".format(i)
-            tmp_slope = Parameter(name=slope_name, value=None, default_starting_value=0.)
+            tmp_slope = Parameter(name=slope_name, value=None, variance=None, default_starting_value=0.)
             slope_names.append(slope_name)
             self.parameter_list.add_parameter(tmp_slope)
-        self.error_variance = Parameter(name="error_variance", value=None, default_starting_value=1.)
+        self.error_variance = Parameter(name="error_variance", value=None, variance=None, default_starting_value=1.)
         self.conditional_mean_parameter_names = ["intercept"] + slope_names
 
     def hypothesis_function(self):

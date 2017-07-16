@@ -33,8 +33,9 @@ class Hypothesis(object):
         if (param_array.shape[0] != self.nparams or len(param_array.shape) != 2 or param_array.shape[1] != 1):
             raise IncorrectMatrixDimensions(
                     "Parameter array needs to be %d by 1" % self.nparams)
-        for i, param in enumerate(self.parameter_list.parameter_list):
-            param.value = param_array[i][0]
+        #for i, param in enumerate(self.parameter_list.parameter_list):
+         #   param.value = param_array[i][0]
+        self.parameter_list.update_parameters(param_array)
 
     def get_parameters(self):
         """

@@ -43,12 +43,20 @@ class NewtonRaphson(IterativeSupervisedAlgorithm):
     def convergence_value(self):
         return norm(self.next_theta - self.current_theta)
 
-    def variance_covariance_matrix(self):
-        # this needs to be inside cost function
-        if self.converged:
-            return -1.*inv(self.cost_function.cost_function_second_derivative())
-        else:
-            raise Exception("Model has not converged")
+    # def variance_covariance_matrix(self):
+        # if self.converged:
+            # return self.cost_function.variance_covariance_matrix()
+        # else:
+            # raise Exception("Model has not converged")
 
-    def standard_errors(self):
-        return sqrt(diag(self.variance_covariance_matrix()))/sqrt(self.nobs)
+    # def parameter_variances(self):
+        # if self.converged:
+            # return self.cost_function.parameter_variances()
+        # else:
+            # raise Exception("Model has not converged")
+
+    # def standard_errors(self):
+        # if self.converged:
+            # return self.cost_function.standard_errors()
+        # else:
+            # raise Exception("Model has not converged")

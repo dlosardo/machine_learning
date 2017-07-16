@@ -31,10 +31,10 @@ class LogisticRegression(Hypothesis):
         :param features A nobs x nx numpy array of feature values
         """
         self.nparams = features.shape[1] + 1
-        self.intercept = Parameter(name="intercept", value=None, default_starting_value=0.)
+        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
         self.parameter_list.add_parameter(self.intercept)
         for i in range(0, features.shape[1]):
-            tmp_slope = Parameter(name="slope_{}".format(i), value=None, default_starting_value=0.)
+            tmp_slope = Parameter(name="slope_{}".format(i), value=None, variance=None, default_starting_value=0.)
             self.parameter_list.add_parameter(tmp_slope)
         if self.features.shape[1] != self.nparams - 1:
             raise IncorrectMatrixDimensions(

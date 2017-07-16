@@ -1,7 +1,10 @@
 """
 Parameter Class
 """
-from numpy import hstack
+from numpy import hstack, diag, sqrt
+import sympy as sp
+from tabulate import tabulate
+import itertools
 
 class Parameter(object):
     """
@@ -10,9 +13,10 @@ class Parameter(object):
     Name must be a string.
     Value must be None or a float.
     """
-    def __init__(self, name, value, default_starting_value):
+    def __init__(self, name, value, variance, default_starting_value):
         self.name = name
         self.value = value
+        self.variance = variance
         self.default_starting_value = default_starting_value
 
     @property
@@ -27,6 +31,10 @@ class Parameter(object):
     def default_starting_value(self):
         return self.__default_starting_value
 
+    @property
+    def variance(self):
+        return self.__variance
+
     @name.setter
     def name(self, name):
         if not isinstance(name, str):
@@ -38,6 +46,12 @@ class Parameter(object):
         if not isinstance(value, float) and value is not None:
             raise TypeError("Parameter value must be None or a float")
         self.__value = value
+
+    @variance.setter
+    def variance(self, variance):
+        if not isinstance(variance, float) and variance is not None:
+            raise TypeError("Parameter variance must be None or a float")
+        self.__variance = variance
 
     @default_starting_value.setter
     def default_starting_value(self, default_starting_value):
@@ -57,6 +71,8 @@ class ParameterList(object):
     def __init__(self):
         self.size = 0
         self.parameter_list = []
+        self.parameter_covariance_matrix = None
+        self.symbolic_covariance_matrix = None
 
     def add_parameter(self, parameter_object):
         if not isinstance(parameter_object, Parameter):
@@ -90,15 +106,31 @@ class ParameterList(object):
                 if not param.is_initialized():
                     param.value = param.default_starting_value
 
-    def update_parameters(self, param_dict):
-        for param in self.parameter_list:
-            for name, value in param_dict.items():
-                if (param.name == name):
-                    param.value = value
+    def set_parameter_variances(self, param_variance_list):
+        for i, param in enumerate(self.parameter_list):
+            param.variance = param_variance_list[i]
+        # if param_variance_dict is None:
+            # return
+        # else:
+            # for param in self.parameter_list:
+                # for name, value in param_variance_dict.items():
+                    # if (param.name == name) & (value is not None):
+                        # param.variance = value
+
+    def set_covariance_matrix(self, cov_matrix):
+        self.parameter_covariance_matrix = cov_matrix
+
+    def update_parameters(self, param_array):
+        for i, param in enumerate(self.parameter_list):
+            param.value = param_array[i][0]
+        #for param in self.parameter_list:
+         #   for name, value in param_dict.items():
+          #      if (param.name == name):
+           #         param.value = value
 
     def get_parameters(self):
         """
-        Reshapes parameters into form suitable for later computation.
+        Reshapes parameters into form suitable for computation.
         First horizontally stacks all parameter values
         Next reshapes into an array of dimension number of parameters by 1.
         :returns A numpy array of dimension number of nparams by 1
@@ -106,7 +138,42 @@ class ParameterList(object):
         """
         return hstack((param.value for param in self.parameter_list)).reshape(self.size, 1)
 
+    def print_parameters(self):
+        names_values = list(zip(self.get_parameter_names(), list(self.get_parameters().ravel())
+            , list(self.get_parameter_standard_errors().ravel())))
+        print(tabulate(names_values, headers=['Parameter', 'Point Estimate', 'Standard Errors']))
+
+    def get_parameter_variances(self):
+        """
+        :returns A numpy array of dimension number of nparams by 1
+         containing the variances of the parameters.
+        """
+        return hstack((param.variance for param in self.parameter_list)).reshape(self.size, 1)
+
+    def get_parameter_standard_errors(self):
+        """
+        :returns A numpy array of dimension number of nparams by 1
+         containing the standard errors of the parameters.
+        """
+        return hstack((sqrt(param.variance) if param.variance is not None else None for param in self.parameter_list)).reshape(self.size, 1)
+
+    def get_parameter_names(self):
+        return [param.name for param in self.parameter_list]
+
     def get_parameter_values_by_name(self, name_list):
         parameters_tmp = [self.get_parameter_by_name(name) for name in name_list]
         return hstack((param.value for param in parameters_tmp)).reshape(len(parameters_tmp), 1)
 
+    def parameter_covariance_matrix(self):
+        return diag([param.variance for param in self.parameter_list])
+
+    def set_parameter_covariance_matrix_symbolic(self):
+        if self.size > 0:
+            covariance_pairs = [i for i in itertools.product(self.get_parameter_names(), repeat=2)]
+            self.symbolic_covariance_matrix = sp.Matrix(self.size, self.size, lambda i,j: sp.var(
+                                             'cov({}, {})'.format(covariance_pairs[i + j + (j*(self.size-1))][0],
+                                             covariance_pairs[i + j +(j*(self.size-1))][1])))
+
+    def covariance_pairs(self):
+        covariance_pairs = [i for i in itertools.product(self.get_parameter_names(), repeat=2)]
+        return covariance_pairs

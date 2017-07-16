@@ -8,7 +8,8 @@ in matrix form:
 %*% is matrix multiplication
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import dot, ones, log, diag
+from numpy import dot, ones, log, diag, sqrt
+from numpy.linalg import inv
 
 
 class LogLoss(CostFunction):
@@ -51,3 +52,12 @@ class LogLoss(CostFunction):
 
     def convergence_value(self, current_cost, new_cost):
         return abs(current_cost[0] - new_cost[0])
+
+    def variance_covariance_matrix(self):
+        return inv(self.cost_function_second_derivative())
+
+    def parameter_variances(self):
+        return diag(self.variance_covariance_matrix())
+
+    def standard_errors(self):
+        return sqrt(diag(self.variance_covariance_matrix()))/sqrt(self.nobs)

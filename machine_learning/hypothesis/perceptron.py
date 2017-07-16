@@ -15,10 +15,10 @@ class Perceptron(Hypothesis):
     def __init__(self, features):
         super(Perceptron, self).__init__(features)
         self.nparams = features.shape[1] + 1
-        self.bias = Parameter(name="bias", value=None, default_starting_value=0.)
+        self.bias = Parameter(name="bias", value=None, variance=None, default_starting_value=0.)
         self.parameter_list.add_parameter(self.bias)
         for i in range(0, features.shape[1]):
-            tmp_feature = Parameter(name="feature_{}".format(i), value=None, default_starting_value=0.)
+            tmp_feature = Parameter(name="feature_{}".format(i), value=None, variance=None, default_starting_value=0.)
             self.parameter_list.add_parameter(tmp_feature)
         if self.features.shape[1] != self.nparams - 1:
             raise IncorrectMatrixDimensions(

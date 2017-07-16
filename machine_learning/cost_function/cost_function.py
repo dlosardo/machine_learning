@@ -9,7 +9,7 @@ class CostFunction(object):
     will be implemented by a specific machine learning
     algorithm such as least squared error regression.
     """
-    def __init__(self, hypothesis, targets):
+    def __init__(self, hypothesis, targets=None):
         self.hypothesis = hypothesis
         self.targets = targets
         self.nobs = self.targets.shape[0]
@@ -32,6 +32,15 @@ class CostFunction(object):
         :return A nparam x 1 numpy array of parameter values
         """
         return self.hypothesis.get_parameters()
+
+    def variance_covariance_matrix(self):
+        return None
+
+    def standard_errors(self):
+        return None
+
+    def parameter_variances(self):
+        return None
 
     def cost_function(self):
         raise NotImplementedError
