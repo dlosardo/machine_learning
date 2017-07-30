@@ -14,9 +14,10 @@ Matrix form:
     nobs x nparams (nx + 1), and THETA is a matrix of dimension nparms (nx + 1) x 1
 """
 
-from machine_learning.hypothesis.hypothesis import Hypothesis
-from machine_learning.model_utils.parameter import Parameter, ParameterList
 from numpy import ndarray, array, dot, hstack, reshape, append, ones
+from machine_learning.hypothesis.hypothesis import Hypothesis
+from machine_learning.model_utils.parameter import Parameter
+from machine_learning.utils.math_utils import add_constant
 
 
 class MultipleLinearRegression(Hypothesis):
@@ -38,11 +39,11 @@ class MultipleLinearRegression(Hypothesis):
         # Next line adds a vector of 1s indicating the intercept.
         # self.features becomes a matrix of dimension nobs x nx with the first column
          # consisting of 1s and the next columns consisting of x values.
-        self.features = append(ones(self.features.shape[0]).reshape(self.features.shape[0], 1), self.features, 1)
+        self.features = add_constant(self.features)
 
     def set_parameters(self):
-        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
-        self.parameter_list.add_parameter(self.intercept)
+        intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
+        self.parameter_list.add_parameter(intercept)
         slope_names = []
         for i in range(0, self.nparams - 1):
             slope_name = "slope_{}".format(i)
@@ -63,4 +64,9 @@ class MultipleLinearRegression(Hypothesis):
         return self.features.dot(self.get_parameters())
 
     def conditional_mean(self):
+        """
+        Computes the conditional mean of targets given inputs
+        If we have y = b*x + e
+        then E(Y|X) = b*x
+        """
         return self.features.dot(self.parameter_list.get_parameter_values_by_name(self.conditional_mean_parameter_names))

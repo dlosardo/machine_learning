@@ -61,3 +61,6 @@ class LogLoss(CostFunction):
 
     def standard_errors(self):
         return sqrt(diag(self.variance_covariance_matrix()))/sqrt(self.nobs)
+
+    def log_likelihood(self):
+        return -1. * self.cost_function() * self.nobs

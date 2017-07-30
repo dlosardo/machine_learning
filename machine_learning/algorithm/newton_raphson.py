@@ -26,6 +26,9 @@ class NewtonRaphson(IterativeSupervisedAlgorithm):
         self.next_theta = None
 
     def reset(self):
+        """
+        Resets the state of the algorithm
+        """
         self.current_theta = None
         self.next_theta = None
         self.iter = 0
@@ -33,6 +36,10 @@ class NewtonRaphson(IterativeSupervisedAlgorithm):
         self.initialize_parameters()
 
     def iterate(self):
+        """
+        Performs one iteration step
+        Updates parameters with new values using cost function
+        """
         self.current_theta = self.get_parameters()
         self.next_theta = self.current_theta - inv(self.cost_function.cost_function_second_derivative()).dot(self.cost_function.cost_function_derivative())
         self.cost_function.update_parameters(self.next_theta)
@@ -42,21 +49,3 @@ class NewtonRaphson(IterativeSupervisedAlgorithm):
 
     def convergence_value(self):
         return norm(self.next_theta - self.current_theta)
-
-    # def variance_covariance_matrix(self):
-        # if self.converged:
-            # return self.cost_function.variance_covariance_matrix()
-        # else:
-            # raise Exception("Model has not converged")
-
-    # def parameter_variances(self):
-        # if self.converged:
-            # return self.cost_function.parameter_variances()
-        # else:
-            # raise Exception("Model has not converged")
-
-    # def standard_errors(self):
-        # if self.converged:
-            # return self.cost_function.standard_errors()
-        # else:
-            # raise Exception("Model has not converged")

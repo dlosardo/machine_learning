@@ -31,5 +31,15 @@ class PerceptronCost(CostFunction):
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
         raise NotImplementedError
 
+    def functional_margin(self, index):
+        """
+        Confidence in the predicted value
+        fm = y_i%*%(weights%*%x_i)
+        """
+        y = self.targets[index, :].copy()
+        y[y == 0] = -1
+        fm = y.T.dot(self.hypothesis.features[index, :].dot(self.get_parameters()))
+        return fm
+
     def decision_boundary(self):
         pass

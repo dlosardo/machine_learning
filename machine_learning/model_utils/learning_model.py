@@ -14,9 +14,9 @@ class LearningModel(object):
     def run_model(self):
         self.algorithm_obj.algorithm()
         if self.algorithm_obj.converged:
-            parameter_variances_list = self.algorithm_obj.cost_function.parameter_variances()
-            if parameter_variances_list is not None:
-                self.algorithm_obj.cost_function.hypothesis.parameter_list.set_parameter_variances(parameter_variances_list)
+            parameter_variances_array = self.algorithm_obj.cost_function.parameter_variances()
+            if parameter_variances_array is not None:
+                self.algorithm_obj.cost_function.hypothesis.parameter_list.set_parameter_variances(list(parameter_variances_array))
                 self.algorithm_obj.cost_function.hypothesis.parameter_list.set_covariance_matrix(self.algorithm_obj.cost_function.variance_covariance_matrix())
             self.algorithm_obj.cost_function.hypothesis.parameter_list.set_parameter_covariance_matrix_symbolic()
 
@@ -29,8 +29,11 @@ class LearningModel(object):
         if self.algorithm_obj.converged:
             return self.algorithm_obj.cost_function.hypothesis.parameter_list.get_parameters()
 
-    def predict(self):
-        pass
+    def predict(self, new_values):
+        if self.algorithm_obj.converged:
+            if new_values is None:
+                pass
+            pass
 
     def plot(self):
         pass
