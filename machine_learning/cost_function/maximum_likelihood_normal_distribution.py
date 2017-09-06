@@ -14,14 +14,18 @@ from machine_learning.cost_function.cost_function import CostFunction
 from numpy import log, pi, var, mean, hstack, vstack, array, sqrt, diag
 from numpy.linalg import inv
 
-POSSIBLE_HYPOTHESES = [2]
 
 class MaximumLikelihoodNormalDistribution(CostFunction):
-    """
-    """
     def __init__(self, hypothesis, targets):
+        """
+        """
         super(MaximumLikelihoodNormalDistribution, self).__init__(hypothesis, targets)
         self.error_variance = self.hypothesis.error_variance
+        self.hypothesis.parameter_list.add_parameter(self.error_variance)
+        self.hypothesis.nparams = self.hypothesis.nparams + 1
+
+    def reset(self):
+        super(MaximumLikelihoodNormalDistribution, self).reset()
         self.hypothesis.parameter_list.add_parameter(self.error_variance)
         self.hypothesis.nparams = self.hypothesis.nparams + 1
 

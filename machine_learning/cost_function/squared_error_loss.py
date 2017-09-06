@@ -10,35 +10,38 @@ in matrix form in general:
 %*% is matrix multiplication
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import dot, ones
+from numpy import ones
 
 
 class SquaredErrorLoss(CostFunction):
-    """Squared error loss cost function
-    :param hypothesis A hypothesis object, e.g., SimpleLinearRegression
-    :param targets A nobs x 1 np array of y values
-    """
     def __init__(self, hypothesis, targets):
+        """
+        Squared error loss cost function
+        :param: hypothesis A hypothesis object, e.g., SimpleLinearRegression
+        :param: targets A nobs x 1 np array of y values
+        """
         super(SquaredErrorLoss, self).__init__(hypothesis, targets)
-        self.nobs = self.targets.shape[0]
 
     def hypothesis_targets(self):
-        """Computes the hypothesis function - targets
-        :returns an np array of dimension nobs x 1
+        """
+        Computes the hypothesis function - targets
+        :returns: an np array of dimension nobs x 1
         """
         return self.hypothesis.hypothesis_function() - self.targets
 
     def cost_function(self):
-        """Computes the squared error loss cost function
-        :returns a 1 x 1 np array containing a float value representing the
+        """
+        Computes the squared error loss cost function
+        :returns: a 1 x 1 np array containing a float value representing the
          value of the cost function
         """
         hyp_minus_targets = self.hypothesis_targets()
         return (1./(2.*self.nobs))*(hyp_minus_targets).T.dot(hyp_minus_targets)
 
     def cost_function_derivative(self):
-        """The derivative of the cost function for all params
-        :returns A nparam x 1 np array of the values of the derivatives of the parameters
+        """
+        The derivative of the cost function for all params
+        :returns: A nparam x 1 np array of the values of the derivatives of the parameters
         """
         return 1./self.nobs*(self.hypothesis.features.T.dot(self.hypothesis_targets()))
 
@@ -49,7 +52,8 @@ class SquaredErrorLoss(CostFunction):
         return abs(current_cost[0] - new_cost[0])
 
     def cost_function_tmp(self):
-        """Computes the cost function the long way - not using hypothesis
+        """
+        Computes the cost function the long way - not using hypothesis
         """
         return self.targets.T.dot(self.targets) - self.targets.T.dot(self.hypothesis.features
                 ).dot(self.get_parameters()) - self.get_parameters().T.dot(self.hypothesis.features.T
@@ -57,15 +61,17 @@ class SquaredErrorLoss(CostFunction):
                                 ).dot(self.hypothesis.features).dot(self.get_parameters())
 
     def cost_function_derivative_int(self):
-        """The derivative of the cost function wrt intercept param
-        :returns A 1 x 1 np array of the value of the derivative of the cost function
+        """
+        The derivative of the cost function wrt intercept param
+        :returns: A 1 x 1 np array of the value of the derivative of the cost function
          wrt the intercept param
         """
         return 1./self.nobs*ones(self.nobs).reshape(1, self.nobs).dot(self.hypothesis_targets())
 
     def cost_function_derivative_slope(self):
-        """The derivative of the cost function wrt slope param
-        :returns A 1 x 1 np array of the value of the derivative of the cost function
+        """
+        The derivative of the cost function wrt slope param
+        :returns: A 1 x 1 np array of the value of the derivative of the cost function
          wrt the slope param
         """
         return 1./self.nobs*(self.hypothesis_targets()).T.dot(self.hypothesis.features)

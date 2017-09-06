@@ -1,16 +1,17 @@
 """
 Gradient Descent ML Algorithm
-IS A SupervisedAlgorithm
+IS an IterativeSupervisedAlgorithm
 """
 from machine_learning.algorithm.iterative_supervised_algorithm import IterativeSupervisedAlgorithm
 
 
 class GradientDescent(IterativeSupervisedAlgorithm):
-    """Constructor for GradientDescent
-    :param learning_rate A float value representing the learning rate
-    :param tolerance A float value representing the tolerance value used to inform convergence specifications
-    """
     def __init__(self, cost_function, learning_rate=None, tolerance=None, param_starting_values=None):
+        """
+        Constructor for GradientDescent
+        :param learning_rate: A float value representing the learning rate
+        :param tolerance: A float value representing the tolerance value used to inform convergence specifications
+        """
         super(GradientDescent, self).__init__(cost_function, param_starting_values)
         if learning_rate is None:
             self.learning_rate = 1.
@@ -28,6 +29,8 @@ class GradientDescent(IterativeSupervisedAlgorithm):
         self.new_cost = None
         self.iter = 0
         self.converged = False
+        self.cost_function_list = []
+        self.convergence_value_list = []
         self.initialize_parameters()
 
     def convergence_criteria_met(self):

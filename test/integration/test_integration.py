@@ -49,14 +49,14 @@ class TestIntegration(object):
         assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_1, places=4)
         assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_2, places=4)
 
-    def test_multiple_linear_regression_maximum_likelihood_batch_gradient_descent_run(self):
-        inputs = ["--input-data-file", "data/input/sample_data.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", 'multiple_linear_regression', "--cost-function-name", 'maximum_likelihood_normal_distribution', "--algorithm-name", "batch_gradient_descent", "--learning-rate", "0.0001", "--tolerance", '.0000000001']
-        learning_model_obj = runmain.main(inputs)
-        parameters = learning_model_obj.get_parameter_point_estimates()
-        assert_almost_equals(parameters[0,0], MULTIPLE_LINEAR_REGRESSION_INTERCEPT, places=1)
-        assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_1, places=1)
-        assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_2, places=1)
-        assert_almost_equals(parameters[3,0], MULTIPLE_LINEAR_REGRESSION_RESIDUAL_VARIANCE, places=1)
+    # def test_multiple_linear_regression_maximum_likelihood_batch_gradient_descent_run(self):
+        # inputs = ["--input-data-file", "data/input/sample_data.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", 'multiple_linear_regression', "--cost-function-name", 'maximum_likelihood_normal_distribution', "--algorithm-name", "batch_gradient_descent", "--learning-rate", "0.0001", "--tolerance", '.0000000001']
+        # learning_model_obj = runmain.main(inputs)
+        # parameters = learning_model_obj.get_parameter_point_estimates()
+        # assert_almost_equals(parameters[0,0], MULTIPLE_LINEAR_REGRESSION_INTERCEPT, places=1)
+        # assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_1, places=1)
+        # assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_2, places=1)
+        # assert_almost_equals(parameters[3,0], MULTIPLE_LINEAR_REGRESSION_RESIDUAL_VARIANCE, places=1)
 
     def test_percetron_batch_run(self):
         inputs = ["--input-data-file", "data/input/sample_perceptron.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", "perceptron", "--cost-function-name", "perceptron_batch_cost", "--algorithm-name", "batch_gradient_descent", "--learning-rate", '1.']

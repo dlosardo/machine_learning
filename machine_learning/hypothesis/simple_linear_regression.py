@@ -14,10 +14,11 @@ Matrix form:
     where %*% is matrix multiplication, X is a matrix of dimension
     nobs x nparams, and THETA is a matrix of dimension nparms x 1
 """
-from numpy import dot, hstack, reshape, append, ones
+from numpy import hstack, append, ones
 from machine_learning.hypothesis.hypothesis import Hypothesis
 from machine_learning.model_utils.parameter import Parameter, ParameterList
 from machine_learning.utils.exceptions import IncorrectMatrixDimensions, ParameterValuesNotInitialized
+
 
 class SimpleLinearRegression(Hypothesis):
     """
@@ -28,10 +29,7 @@ class SimpleLinearRegression(Hypothesis):
     def __init__(self, features):
         super(SimpleLinearRegression, self).__init__(features)
         self.nparams = self.features.shape[1] + 1
-        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
-        self.slope = Parameter(name="slope", value=None, variance=None, default_starting_value=0.)
-        self.parameter_list.add_parameter(self.intercept)
-        self.parameter_list.add_parameter(self.slope)
+        self.set_parameters()
         if self.features.shape[1] != 1:
             raise IncorrectMatrixDimensions(
                 "Number of columns is equal to %d but should be equal to 1" % self.features.shape[1])
@@ -39,6 +37,12 @@ class SimpleLinearRegression(Hypothesis):
         # self.features becomes a matrix of dimension nobs x 2 with the first column
          # consisting of 1s and the second column consisting of x values.
         self.features = append(ones(self.features.shape[0]).reshape(self.features.shape[0], 1), self.features, 1)
+
+    def set_parameters(self):
+        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
+        self.slope = Parameter(name="slope", value=None, variance=None, default_starting_value=0.)
+        self.parameter_list.add_parameter(self.intercept)
+        self.parameter_list.add_parameter(self.slope)
 
     def update_parameters(self, param_array):
         """

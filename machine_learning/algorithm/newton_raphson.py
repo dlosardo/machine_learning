@@ -9,14 +9,15 @@ they are sqrt(1 / negative partial second derivative of likelihood wrt parameter
 """
 from machine_learning.algorithm.iterative_supervised_algorithm import IterativeSupervisedAlgorithm
 from numpy.linalg import inv, norm
-from numpy import sqrt, diag
+
 
 class NewtonRaphson(IterativeSupervisedAlgorithm):
-    """Constructor for NewtonRaphson
-    :param param_starting_values A dict of the form parameter_name: parameter_value
-    :cost_function A CostFunction object, e.g., SquaredErrorLoss
-    """
     def __init__(self, cost_function, tolerance=None, param_starting_values=None):
+        """
+        Constructor for NewtonRaphson
+        :param param_starting_values A dict of the form parameter_name: parameter_value
+        :cost_function A CostFunction object, e.g., SquaredErrorLoss
+        """
         super(NewtonRaphson, self).__init__(cost_function, param_starting_values)
         if tolerance is None:
             self.tolerance = .001
@@ -33,6 +34,8 @@ class NewtonRaphson(IterativeSupervisedAlgorithm):
         self.next_theta = None
         self.iter = 0
         self.converged = False
+        self.cost_function_list = []
+        self.convergence_value_list = []
         self.initialize_parameters()
 
     def iterate(self):

@@ -1,12 +1,11 @@
 """
 Unit Tests for Parameter and ParameterList classes
 """
-
-from numpy import array
 from nose.tools import assert_raises, assert_is_instance, assert_equals
 from numpy.testing import assert_array_equal, assert_array_almost_equal
-from numpy import sqrt
+from numpy import sqrt, array
 from machine_learning.model_utils.parameter import Parameter, ParameterList
+from machine_learning.utils.exceptions import ParameterValuesNotInitialized, IncorrectMatrixDimensions
 
 
 class TestParameter(object):
@@ -124,8 +123,8 @@ class TestParameterList(object):
         assert_equals(self.parameter_list.set_covariance_matrix(array([1.])), None)
         self.parameter_list.add_parameter(self.intercept)
         assert_raises(TypeError, self.parameter_list.set_covariance_matrix, [])
-        assert_raises(TypeError, self.parameter_list.set_covariance_matrix, array([1.]))
-        assert_raises(TypeError, self.parameter_list.set_covariance_matrix, array([[1.], [1.]]))
+        assert_raises(IncorrectMatrixDimensions, self.parameter_list.set_covariance_matrix, array([1.]))
+        assert_raises(IncorrectMatrixDimensions, self.parameter_list.set_covariance_matrix, array([[1.], [1.]]))
         self.parameter_list.set_covariance_matrix(true_cov_array)
         assert_array_equal(true_cov_array, self.parameter_list.parameter_covariance_matrix)
 
@@ -133,6 +132,8 @@ class TestParameterList(object):
         assert_raises(Exception, self.parameter_list.update_parameters, array([[1.]]))
         self.parameter_list.add_parameter(self.intercept)
         self.parameter_list.add_parameter(self.slope_1)
+        assert_raises(ParameterValuesNotInitialized, self.parameter_list.update_parameters, array([[1., 1.], [1., 1.]]))
+        self.parameter_list.initialize_parameters()
         assert_raises(TypeError, self.parameter_list.update_parameters, "")
         assert_raises(TypeError, self.parameter_list.update_parameters, array([1.]))
         assert_raises(TypeError, self.parameter_list.update_parameters, array([[1., 1.], [1., 1.]]))
@@ -144,8 +145,8 @@ class TestParameterList(object):
         assert_raises(Exception, self.parameter_list.get_parameter_at_index, 0)
         self.parameter_list.add_parameter(self.intercept)
         self.parameter_list.add_parameter(self.slope_1)
-        assert_raises(Exception, self.parameter_list.get_parameter_at_index, 10)
-        assert_raises(Exception, self.parameter_list.get_parameter_at_index, -1)
+        assert_raises(IndexError, self.parameter_list.get_parameter_at_index, 10)
+        assert_raises(IndexError, self.parameter_list.get_parameter_at_index, -1)
         assert_equals(self.intercept, self.parameter_list.get_parameter_at_index(0))
         assert_equals(self.slope_1, self.parameter_list.get_parameter_at_index(1))
 
@@ -246,6 +247,6 @@ class TestParameterList(object):
         assert_raises(Exception, self.parameter_list.get_parameters)
         self.parameter_list.add_parameter(self.intercept)
         self.parameter_list.add_parameter(self.slope_1)
-        assert_raises(Exception, self.parameter_list.get_parameters)
+        assert_raises(ParameterValuesNotInitialized, self.parameter_list.get_parameters)
         self.parameter_list.initialize_parameters()
         assert_array_equal(array([[0.], [1.]]), self.parameter_list.get_parameters())

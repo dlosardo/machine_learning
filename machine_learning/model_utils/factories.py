@@ -10,19 +10,29 @@ class HypothesisTypes(Enum):
     LOGISTIC_REGRESSION = 3
     PERCEPTRON = 4
 
+    @classmethod
+    def values_list(cls):
+        return [hypothesis.value for hypothesis in list(cls)]
+
+    @classmethod
+    def names_list(cls):
+        return [hypothesis.name.lower() for hypothesis in list(cls)]
+
 
 class HypothesisFactory(object):
 
     @staticmethod
     def get_hypothesis(n, features, **kwargs):
-        if n == HypothesisTypes.SIMPLE_LINEAR_REGRESSION:
+        if n == HypothesisTypes.SIMPLE_LINEAR_REGRESSION.value:
             return simple_linear_regression.SimpleLinearRegression(features=features, **kwargs)
-        elif n == HypothesisTypes.MULTIPLE_LINEAR_REGRESSION:
+        elif n == HypothesisTypes.MULTIPLE_LINEAR_REGRESSION.value:
             return multiple_linear_regression.MultipleLinearRegression(features=features, **kwargs)
-        elif n == HypothesisTypes.LOGISTIC_REGRESSION:
+        elif n == HypothesisTypes.LOGISTIC_REGRESSION.value:
             return logistic_regression.LogisticRegression(features=features, **kwargs)
-        elif n == HypothesisTypes.PERCEPTRON:
+        elif n == HypothesisTypes.PERCEPTRON.value:
             return perceptron.Perceptron(features=features, **kwargs)
+        else:
+            raise ValueError("Invalid hypothesis id: {}".format(n))
 
     @staticmethod
     def get_hypothesis_by_name(hypothesis_name, features, **kwargs):
@@ -45,8 +55,41 @@ class CostFunctionTypes(Enum):
     PERCEPTRON_BATCH_COST = 4
     PERCEPTRON_ONLINE_COST = 5
 
+    @classmethod
+    def values_list(cls):
+        return [cost_function.value for cost_function in list(cls)]
+
+    @classmethod
+    def names_list(cls):
+        return [cost_function.name.lower() for cost_function in list(cls)]
+
+
+class HypothesisCostFunctions(object):
+    @staticmethod
+    def cost_function_hypothesis_dict():
+        return {HypothesisTypes.SIMPLE_LINEAR_REGRESSION: set([CostFunctionTypes.SQUARED_ERROR_LOSS]),
+                HypothesisTypes.MULTIPLE_LINEAR_REGRESSION: set([CostFunctionTypes.SQUARED_ERROR_LOSS, CostFunctionTypes.MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION]),
+                HypothesisTypes.LOGISTIC_REGRESSION: set([CostFunctionTypes.LOG_LOSS]),
+                HypothesisTypes.PERCEPTRON: set([CostFunctionTypes.PERCEPTRON_BATCH_COST, CostFunctionTypes.PERCEPTRON_ONLINE_COST])
+               }
+
 
 class CostFunctionFactory(object):
+
+    @staticmethod
+    def get_cost_function(n, hypothesis, targets, **kwargs):
+        if n == CostFunctionTypes.SQUARED_ERROR_LOSS.value:
+            return squared_error_loss.SquaredErrorLoss(hypothesis=hypothesis, targets=targets, **kwargs)
+        if n == CostFunctionTypes.MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION.value:
+            return maximum_likelihood_normal_distribution.MaximumLikelihoodNormalDistribution(hypothesis=hypothesis, targets=targets, **kwargs)
+        if n == CostFunctionTypes.LOG_LOSS.value:
+            return log_loss.LogLoss(hypothesis=hypothesis, targets=targets, **kwargs)
+        elif n == CostFunctionTypes.PERCEPTRON_BATCH_COST.value:
+            return perceptron_batch_cost.PerceptronBatchCost(hypothesis=hypothesis, targets=targets, **kwargs)
+        elif n == CostFunctionTypes.PERCEPTRON_ONLINE_COST.value:
+            return perceptron_online_cost.PerceptronOnlineCost(hypothesis=hypothesis, targets=targets, **kwargs)
+        else:
+            raise ValueError("Invalid cost function id: {}".format(n))
 
     @staticmethod
     def get_cost_function_by_name(cost_function_name, hypothesis, targets, **kwargs):
@@ -69,8 +112,40 @@ class AlgorithmTypes(Enum):
     STOCHASTIC_GRADIENT_DESCENT = 2
     NEWTON_RAPHSON = 3
 
+    @classmethod
+    def values_list(cls):
+        return [algorithm.value for algorithm in list(cls)]
+
+    @classmethod
+    def names_list(cls):
+        return [algorithm.name.lower() for algorithm in list(cls)]
+
+
+class CostFunctionsAlgorithms(object):
+    @staticmethod
+    def cost_function_algorithm_dict():
+        return {CostFunctionTypes.SQUARED_ERROR_LOSS: set([AlgorithmTypes.BATCH_GRADIENT_DESCENT, AlgorithmTypes.STOCHASTIC_GRADIENT_DESCENT]),
+                CostFunctionTypes.MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION: set([AlgorithmTypes.BATCH_GRADIENT_DESCENT, AlgorithmTypes.STOCHASTIC_GRADIENT_DESCENT
+                    , AlgorithmTypes.NEWTON_RAPHSON]),
+                CostFunctionTypes.LOG_LOSS: set([AlgorithmTypes.BATCH_GRADIENT_DESCENT, AlgorithmTypes.STOCHASTIC_GRADIENT_DESCENT
+                    , AlgorithmTypes.NEWTON_RAPHSON]),
+                CostFunctionTypes.PERCEPTRON_BATCH_COST: set([AlgorithmTypes.BATCH_GRADIENT_DESCENT]),
+                CostFunctionTypes.PERCEPTRON_ONLINE_COST: set([AlgorithmTypes.STOCHASTIC_GRADIENT_DESCENT])
+               }
+
 
 class AlgorithmFactory(object):
+
+    @staticmethod
+    def get_algorithm(n, cost_function, **kwargs):
+        if n == AlgorithmTypes.BATCH_GRADIENT_DESCENT.value:
+            return batch_gradient_descent.BatchGradientDescent(cost_function=cost_function, **kwargs)
+        elif n == AlgorithmTypes.STOCHASTIC_GRADIENT_DESCENT.value:
+            return stochastic_gradient_descent.StochasticGradientDescent(cost_function=cost_function, **kwargs)
+        elif n == AlgorithmTypes.NEWTON_RAPHSON.value:
+            return newton_raphson.NewtonRaphson(cost_function=cost_function, **kwargs)
+        else:
+            raise ValueError("Invalid algorithm id: {}".format(n))
 
     @staticmethod
     def get_algorithm_by_name(algorithm_name, cost_function, **kwargs):

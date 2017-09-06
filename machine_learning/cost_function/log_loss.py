@@ -8,21 +8,22 @@ in matrix form:
 %*% is matrix multiplication
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import dot, ones, log, diag, sqrt
+from numpy import ones, log, diag, sqrt
 from numpy.linalg import inv
 
 
 class LogLoss(CostFunction):
-    """log loss loss cost function
-    :param hypothesis A hypothesis object, e.g., SimpleLinearRegression
-    :param targets A nobs x 1 np array of y values
-    """
     def __init__(self, hypothesis, targets):
+        """
+        log loss cost function
+        :param hypothesis: A hypothesis object, e.g., SimpleLinearRegression
+        :param targets: A nobs x 1 np array of y values
+        """
         super(LogLoss, self).__init__(hypothesis, targets)
-        self.nobs = self.targets.shape[0]
 
     def cost_function(self):
-        """Computes the log loss loss cost function
+        """
+        Computes the log loss loss cost function
         :returns a 1 x 1 np array containing a float value representing the
          value of the cost function
         """
@@ -34,14 +35,16 @@ class LogLoss(CostFunction):
         return cost
 
     def cost_function_derivative(self):
-        """The derivative of the cost function for all params
-        :returns A nparam x 1 np array of the values of the derivatives of the parameters
+        """
+        The derivative of the cost function for all params
+        :returns: A nparam x 1 np array of the values of the derivatives of the parameters
         """
         return 1./self.nobs*(self.hypothesis.features.T.dot(
             self.hypothesis.hypothesis_function() - self.targets))
 
     def cost_function_second_derivative(self):
-        """The second derivative of the cost function for all params
+        """
+        The second derivative of the cost function for all params
         :returns A nparam x nparam np array of the values of the 2nd derivatives of the parameters
         """
         return -1.*(-1./self.nobs * self.hypothesis.features.T.dot(diag(diag(self.hypothesis.hypothesis_function() * (

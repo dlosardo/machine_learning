@@ -2,23 +2,39 @@
 Setup for model components.
 Hypothesis, CostFunction, Algorithm
 """
-from machine_learning.model_utils.factories import HypothesisFactory, CostFunctionFactory, AlgorithmFactory
+from machine_learning.model_utils.factories import (HypothesisFactory, CostFunctionFactory, AlgorithmFactory,
+        HypothesisCostFunctions, CostFunctionsAlgorithms)
+from machine_learning.utils.exceptions import (HypothesisCostFunctionDependencyException,
+        CostFunctionAlgorithmDependencyException)
+
 
 class ModelSetup(object):
-    def __init__(self, hypothesis_name, cost_function_name, algorithm_name):
-        self.hypothesis_name = hypothesis_name
-        self.cost_function_name = cost_function_name
-        self.algorithm_name = algorithm_name
+    def __init__(self, hypothesis_type, cost_function_type, algorithm_type):
+        """
+        Given a hypothesis type, cost function type, and algorithm type:
+            1. Checks whether the dependencies between the different model component are valid
+            2. Sets each model component
+        """
+        self.hypothesis_type = hypothesis_type
+        self.cost_function_type = cost_function_type
+        self.algorithm_type = algorithm_type
         self.check_dependencies()
 
     def check_dependencies(self):
-        if self.hypothesis_name == "multiple_linear_regression":
-            if self.cost_function_name == "log_loss":
-                raise Exception("Cannot use {} cost function with {} hypothesis".format(
-                    self.cost_function_name, self.hypothesis_name))
+        """
+        Where the model component dependencies are validated.
+        """
+        if not self.cost_function_type in HypothesisCostFunctions.cost_function_hypothesis_dict()[self.hypothesis_type]:
+            raise HypothesisCostFunctionDependencyException(self.hypothesis_type.name, self.cost_function_type.name)
+        if not self.algorithm_type in CostFunctionsAlgorithms.cost_function_algorithm_dict()[self.cost_function_type]:
+            CostFunctionAlgorithmDependencyException(self.cost_function_type.name, self.algorithm_type.name)
 
     def model_setup(self, features, targets=None, learning_rate=None, tolerance=None
             , starting_parameter_values=None):
+        """
+        Performs the model setup. First sets hypothesis, then cost function, then algorithm.
+        :returns: An algorithm object
+        """
         hypothesis_obj = self.set_hypothesis(features)
         optional_cost_fnx_arguments = [{"targets": targets}]
         cost_fnx_kwargs = {}
@@ -37,16 +53,16 @@ class ModelSetup(object):
         return algorithm_obj
 
     def set_hypothesis(self, features, **kwargs):
-        hypothesis_object = HypothesisFactory.get_hypothesis_by_name(self.hypothesis_name, features, **kwargs)
+        hypothesis_object = HypothesisFactory.get_hypothesis(self.hypothesis_type.value, features, **kwargs)
         return hypothesis_object
 
     def set_cost_function(self, hypothesis, targets=None, **kwargs):
-        cost_function_object = CostFunctionFactory.get_cost_function_by_name(
-                self.cost_function_name, hypothesis, targets, **kwargs)
+        cost_function_object = CostFunctionFactory.get_cost_function(
+                self.cost_function_type.value, hypothesis, targets, **kwargs)
         return cost_function_object
 
     def set_algorithm(self, cost_function, **kwargs):
-        algorithm_object = AlgorithmFactory.get_algorithm_by_name(self.algorithm_name
+        algorithm_object = AlgorithmFactory.get_algorithm(self.algorithm_type.value
                 , cost_function=cost_function
                 , **kwargs)
         return algorithm_object

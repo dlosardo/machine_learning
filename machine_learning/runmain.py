@@ -2,16 +2,14 @@
 runmain takes and validates command line arguments and calls run method
 """
 from argparse import ArgumentParser, FileType
-import sys, csv
+import sys
 from machine_learning.model_utils.factories import HypothesisTypes, CostFunctionTypes, AlgorithmTypes
 from machine_learning.driver.command_line_driver import run
 
-hypothesis_choices=[hypothesis_type.name.lower() for hypothesis_type in list(HypothesisTypes)]
-cost_function_choices=[cost_function_type.name.lower() for cost_function_type in list(CostFunctionTypes)]
-algorithm_choices=[algorithm_type.name.lower() for algorithm_type in list(AlgorithmTypes)]
-
 def main(args=None):
-    """Main method that parses command line arguments and calls run method"""
+    """
+    Main method that parses command line arguments and calls run method
+    """
     if args is None:
         args = sys.argv[1: ]
     else:
@@ -29,16 +27,16 @@ def main(args=None):
         dest='number_targets', help='An integer representing number of targets in input dataset')
     parser.add_argument(
         '--hypothesis-name', type=str, required=True,
-        choices=hypothesis_choices,
-        dest='hypothesis_name', help='Can be one of: {}'.format(", ".join(hypothesis_choices)))
+        choices=HypothesisTypes.names_list(),
+        dest='hypothesis_name', help='Can be one of: {}'.format(", ".join(HypothesisTypes.names_list())))
     parser.add_argument(
         '--cost-function-name', type=str, required=True,
-        choices=cost_function_choices,
-        dest='cost_function_name', help='Can be one of: {}'.format(", ".join(cost_function_choices)))
+        choices=CostFunctionTypes.names_list(),
+        dest='cost_function_name', help='Can be one of: {}'.format(", ".join(CostFunctionTypes.names_list())))
     parser.add_argument(
         '--algorithm-name', type=str, required=True,
-        choices=algorithm_choices,
-        dest='algorithm_name', help='Can be one of: {}'.format(", ".join(algorithm_choices)))
+        choices=AlgorithmTypes.names_list(),
+        dest='algorithm_name', help='Can be one of: {}'.format(", ".join(AlgorithmTypes.names_list())))
     parser.add_argument(
         '--tolerance', type=float, required=False,
         default = None,
@@ -56,9 +54,9 @@ def main(args=None):
         options.input_data_file
         , options.number_features
         , options.number_targets
-        , options.hypothesis_name
-        , options.cost_function_name
-        , options.algorithm_name
+        , HypothesisTypes[options.hypothesis_name.upper()]
+        , CostFunctionTypes[options.cost_function_name.upper()]
+        , AlgorithmTypes[options.algorithm_name.upper()]
         , options.learning_rate
         , options.tolerance
         , options.starting_parameter_values_file)

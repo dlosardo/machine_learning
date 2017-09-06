@@ -6,14 +6,16 @@ from machine_learning.algorithm.gradient_descent import GradientDescent
 
 
 class BatchGradientDescent(GradientDescent):
-    """Constructor for GradientDescent
-    """
     def __init__(self, cost_function, learning_rate, tolerance=None, param_starting_values=None):
+        """
+        Constructor for GradientDescent
+        """
         super(BatchGradientDescent, self).__init__(cost_function, learning_rate=learning_rate
                 , tolerance=tolerance, param_starting_values=param_starting_values)
 
     def iterate(self):
-        """One iteration step
+        """
+        One iteration step
         1. Set the current cost to the calculation of the cost function using the current parameter estimates
         2. Calculate updated parameter estimates
         3. Update parameter estimates

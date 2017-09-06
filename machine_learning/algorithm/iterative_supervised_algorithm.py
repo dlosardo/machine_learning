@@ -1,25 +1,31 @@
 """
-Abstract class for supervised algorithm
+Abstract class for iterative supervised algorithm
 """
 from machine_learning.algorithm.supervised_algorithm import SupervisedAlgorithm
 
+
 class IterativeSupervisedAlgorithm(SupervisedAlgorithm):
-    """Supervised algorithm.
-    :param cost_function A CostFunction object, e.g., SquaredErrorLoss
-    :param param_starting_values A dict of the form parameter_name: parameter_value
-    """
     def __init__(self, cost_function, param_starting_values):
+        """
+        Iterative Supervised Algorithm.
+        :param cost_function: A CostFunction object, e.g., SquaredErrorLoss
+        :param param_starting_values: A dict of the form {parameter_name: parameter_value}
+        """
         super(IterativeSupervisedAlgorithm, self).__init__(cost_function, param_starting_values)
         self.iter = 0
         self.converged = False
-        self.initialize_parameters()
+        self.cost_function_list = []
+        self.convergence_value_list = []
 
     def algorithm(self):
-        """Run the algorithm
+        """
+        Run the algorithm
         Call iterate until the change in the cost function is less than the specified tolerance value
         """
         while (True):
             self.iterate()
+            self.cost_function_list.append(self.cost_function.cost_function())
+            self.convergence_value_list.append(self.convergence_value())
             if self.iter % 100000 == 0:
                 print("iter: {}".format(self.iter))
                 print("current convergence value: {}".format(self.convergence_value()))

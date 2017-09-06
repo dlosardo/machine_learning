@@ -5,17 +5,19 @@ from numpy import hstack, diag, sqrt, ndarray
 import sympy as sp
 from tabulate import tabulate
 import itertools
+from machine_learning.utils.exceptions import ParameterValuesNotInitialized, IncorrectMatrixDimensions
+
 
 class Parameter(object):
-    """
-    Constructor
-    Parameter has a name, a value, a variance, and a default starting value.
-    Name must be a string.
-    Value must be None or a float.
-    Variance must be None or a float.
-    Default Starting Value must be a float.
-    """
     def __init__(self, name, value, variance, default_starting_value):
+        """
+        Constructor
+        Parameter has a name, a value, a variance, and a default starting value.
+        Name must be a string.
+        Value must be None or a float.
+        Variance must be None or a float.
+        Default Starting Value must be a float.
+        """
         self.name = name
         self.value = value
         self.variance = variance
@@ -70,15 +72,16 @@ class Parameter(object):
     def is_initialized(self):
         return self.value is not None
 
+
 """
 ParameterList Class
 """
 class ParameterList(object):
-    """
-    Constructor
-    Initialized to an empty list
-    """
     def __init__(self):
+        """
+        Constructor
+        Initialized to an empty list
+        """
         self.size = 0
         self.__parameter_list = []
         self.parameter_covariance_matrix = None
@@ -165,9 +168,9 @@ class ParameterList(object):
         if not isinstance(cov_matrix, ndarray):
             raise TypeError("cov_matrix must be a Numpy Array object")
         if cov_matrix.ndim != 2:
-            raise TypeError("cov_matrix must be two dimensions, found {} dimensions".format(cov_matrix.ndim))
+            raise IncorrectMatrixDimensions("cov_matrix must be two dimensions, found {} dimensions".format(cov_matrix.ndim))
         if not (cov_matrix.shape[0] == self.size and cov_matrix.shape[1] == self.size):
-            raise TypeError("cov_matrix must be {} by {}, found {} by {}".format(self.size
+            raise IncorrectMatrixDimensions("cov_matrix must be {} by {}, found {} by {}".format(self.size
                 , self.size, cov_matrix.shape[0], cov_matrix.shape[1]))
         self.parameter_covariance_matrix = cov_matrix
 
@@ -178,6 +181,9 @@ class ParameterList(object):
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
+        if not self.all_parameters_initialized():
+            raise ParameterValuesNotInitialized(
+                    "Parameter values have not yet been initialized")
         if not isinstance(param_array, ndarray):
             raise TypeError("param_array must be a Numpy Array object")
         if param_array.ndim != 2:
@@ -193,11 +199,13 @@ class ParameterList(object):
         Reshapes parameters into form suitable for computation.
         First horizontally stacks all parameter values
         Next reshapes into an array of dimension number of parameters by 1.
-        :returns A numpy array of dimension number of params by 1
+        :returns: A numpy array of dimension number of params by 1
          containing the values of the parameters.
         """
+        if self.size == 0:
+            raise Exception("Parameter List is empty")
         if not self.all_parameters_initialized():
-            raise Exception("Not all parameters are initialized")
+            raise ParameterValuesNotInitialized("Not all parameters are initialized")
         return hstack((param.value for param in self.parameter_list)).reshape(self.size, 1)
 
     def get_parameter_by_name(self, parameter_name):
@@ -219,7 +227,7 @@ class ParameterList(object):
         if self.size == 0:
             raise Exception("Parameter List is empty")
         if (index < 0) or (index >= self.size):
-            raise Exception("index out of bounds, must be between 0 and {}".format(self.size - 1))
+            raise IndexError("index out of bounds, must be between 0 and {}".format(self.size - 1))
         return self.parameter_list[index]
 
     def get_parameter_names(self):
