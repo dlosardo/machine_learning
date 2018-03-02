@@ -44,7 +44,7 @@ def extract_data(data, number_features, number_targets):
     return features, targets
 
 def run(input_data_file, number_features, number_targets, hypothesis_type, cost_function_type, algorithm_type
-        , learning_rate, tolerance, starting_parameter_values_file):
+        , regularizer_name, regularization_weight, learning_rate, tolerance, starting_parameter_values_file):
     """
     """
     if starting_parameter_values_file is None:
@@ -57,8 +57,8 @@ def run(input_data_file, number_features, number_targets, hypothesis_type, cost_
     data = get_input_data(input_data_file)
     features, targets = extract_data(data, number_features, number_targets)
     # obtain algorithm object
-    algorithm_obj = model_setup_obj.model_setup(features, targets, learning_rate
-     , tolerance, starting_parameter_values)
+    algorithm_obj = model_setup_obj.model_setup(features, targets, regularizer_name
+            , regularization_weight, learning_rate, tolerance, starting_parameter_values)
     # create learning model object and run model and print results
     learning_model_obj = LearningModel(algorithm_obj)
     learning_model_obj.run_model()

@@ -3,7 +3,7 @@ runmain takes and validates command line arguments and calls run method
 """
 from argparse import ArgumentParser, FileType
 import sys
-from machine_learning.model_utils.factories import HypothesisTypes, CostFunctionTypes, AlgorithmTypes
+from machine_learning.model_utils.factories import HypothesisTypes, CostFunctionTypes, AlgorithmTypes, RegularizerTypes
 from machine_learning.driver.command_line_driver import run
 
 def main(args=None):
@@ -38,13 +38,22 @@ def main(args=None):
         choices=AlgorithmTypes.names_list(),
         dest='algorithm_name', help='Can be one of: {}'.format(", ".join(AlgorithmTypes.names_list())))
     parser.add_argument(
-        '--tolerance', type=float, required=False,
+        '--regularizer-name', type=str, required=False,
         default = None,
-        dest='tolerance', help='A float value representing the tolerance for stopping criteria of an algorithm')
+        choices=RegularizerTypes.names_list(),
+        dest='regularizer_name', help='A string representing the name of the regularizer to use')
+    parser.add_argument(
+        '--regularization-weight', type=float, required=False,
+        default = None,
+        dest='regularization_weight', help='A float value representing the regularization weight')
     parser.add_argument(
         '--learning-rate', type=float, required=False,
         default = None,
         dest='learning_rate', help='A float value representing the learning rate of an algorithm')
+    parser.add_argument(
+        '--tolerance', type=float, required=False,
+        default = None,
+        dest='tolerance', help='A float value representing the tolerance for stopping criteria of an algorithm')
     parser.add_argument(
         '--starting-parameter-values-file', type=FileType('r'), required=False,
         default=None,
@@ -57,6 +66,8 @@ def main(args=None):
         , HypothesisTypes[options.hypothesis_name.upper()]
         , CostFunctionTypes[options.cost_function_name.upper()]
         , AlgorithmTypes[options.algorithm_name.upper()]
+        , options.regularizer_name
+        , options.regularization_weight
         , options.learning_rate
         , options.tolerance
         , options.starting_parameter_values_file)

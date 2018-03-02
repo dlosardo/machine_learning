@@ -15,6 +15,7 @@ class Hypothesis(object):
         self.parameter_list = ParameterList()
         self.features = features
         self.nfeatures = self.features.shape[1]
+        self.nparams = 0
 
     def parameters_initialized(self):
         """

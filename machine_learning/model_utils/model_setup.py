@@ -29,14 +29,15 @@ class ModelSetup(object):
         if not self.algorithm_type in CostFunctionsAlgorithms.cost_function_algorithm_dict()[self.cost_function_type]:
             CostFunctionAlgorithmDependencyException(self.cost_function_type.name, self.algorithm_type.name)
 
-    def model_setup(self, features, targets=None, learning_rate=None, tolerance=None
-            , starting_parameter_values=None):
+    def model_setup(self, features, targets=None, regularizer_name=None, regularization_weight=None
+            , learning_rate=None, tolerance=None, starting_parameter_values=None):
         """
         Performs the model setup. First sets hypothesis, then cost function, then algorithm.
         :returns: An algorithm object
         """
         hypothesis_obj = self.set_hypothesis(features)
-        optional_cost_fnx_arguments = [{"targets": targets}]
+        optional_cost_fnx_arguments = [{"targets": targets}, {"regularizer_name": regularizer_name}
+                , {"regularization_weight": regularization_weight}]
         cost_fnx_kwargs = {}
         for optional_cost_fnx_argument in optional_cost_fnx_arguments:
             for key, val in optional_cost_fnx_argument.items():

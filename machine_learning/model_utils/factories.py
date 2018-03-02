@@ -4,19 +4,22 @@ from machine_learning.cost_function import squared_error_loss, maximum_likelihoo
 from machine_learning.algorithm import batch_gradient_descent, stochastic_gradient_descent, newton_raphson
 
 
-class HypothesisTypes(Enum):
+class Types(Enum):
+
+    @classmethod
+    def values_list(cls):
+        return [type_.value for type_ in list(cls)]
+
+    @classmethod
+    def names_list(cls):
+        return [type_.name.lower() for type_ in list(cls)]
+
+
+class HypothesisTypes(Types):
     SIMPLE_LINEAR_REGRESSION = 1
     MULTIPLE_LINEAR_REGRESSION = 2
     LOGISTIC_REGRESSION = 3
     PERCEPTRON = 4
-
-    @classmethod
-    def values_list(cls):
-        return [hypothesis.value for hypothesis in list(cls)]
-
-    @classmethod
-    def names_list(cls):
-        return [hypothesis.name.lower() for hypothesis in list(cls)]
 
 
 class HypothesisFactory(object):
@@ -48,20 +51,19 @@ class HypothesisFactory(object):
             raise ValueError("Invalid hypothesis name: {}".format(hypothesis_name))
 
 
-class CostFunctionTypes(Enum):
+class RegularizerTypes(Types):
+    NONE = 1
+    RIDGE = 2
+    LASSO = 3
+    ELASTIC_NET = 4
+
+
+class CostFunctionTypes(Types):
     SQUARED_ERROR_LOSS = 1
     MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION = 2
     LOG_LOSS = 3
     PERCEPTRON_BATCH_COST = 4
     PERCEPTRON_ONLINE_COST = 5
-
-    @classmethod
-    def values_list(cls):
-        return [cost_function.value for cost_function in list(cls)]
-
-    @classmethod
-    def names_list(cls):
-        return [cost_function.name.lower() for cost_function in list(cls)]
 
 
 class HypothesisCostFunctions(object):
@@ -107,18 +109,10 @@ class CostFunctionFactory(object):
             raise ValueError("Invalid cost function name: {}".format(cost_function_name))
 
 
-class AlgorithmTypes(Enum):
+class AlgorithmTypes(Types):
     BATCH_GRADIENT_DESCENT = 1
     STOCHASTIC_GRADIENT_DESCENT = 2
     NEWTON_RAPHSON = 3
-
-    @classmethod
-    def values_list(cls):
-        return [algorithm.value for algorithm in list(cls)]
-
-    @classmethod
-    def names_list(cls):
-        return [algorithm.name.lower() for algorithm in list(cls)]
 
 
 class CostFunctionsAlgorithms(object):

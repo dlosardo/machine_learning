@@ -10,17 +10,30 @@ in matrix form in general:
 %*% is matrix multiplication
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import ones
+from numpy import ones, zeros, fill_diagonal, array, hstack, square
 
 
 class SquaredErrorLoss(CostFunction):
-    def __init__(self, hypothesis, targets):
+    def __init__(self, hypothesis, targets, regularizer_name=None, regularization_weight=0):
         """
         Squared error loss cost function
         :param: hypothesis A hypothesis object, e.g., SimpleLinearRegression
         :param: targets A nobs x 1 np array of y values
+        :param regularizer_name: A string representing the name of the regularizer
+        :param regularization_weight: A float of the weight for the regularizer
         """
-        super(SquaredErrorLoss, self).__init__(hypothesis, targets)
+        super(SquaredErrorLoss, self).__init__(hypothesis, targets, regularizer_name, regularization_weight)
+        self.set_regularization_matrix()
+
+    def set_regularization_matrix(self):
+        """
+        Sets the regularization matrix.
+        The intercept is not affected in the calculation thus the matrix 'picks' out only the
+        slope parameters.
+        """
+        self.regularization_matrix = zeros((self.nparams, self.nparams), float)
+        fill_diagonal(self.regularization_matrix, hstack((array([0]), ones(self.nparams - 1))))
+        self.regularization_matrix = self.regularization_weight * self.regularization_matrix
 
     def hypothesis_targets(self):
         """
@@ -36,42 +49,17 @@ class SquaredErrorLoss(CostFunction):
          value of the cost function
         """
         hyp_minus_targets = self.hypothesis_targets()
-        return (1./(2.*self.nobs))*(hyp_minus_targets).T.dot(hyp_minus_targets)
+        return ((1./(2.*self.nobs))*(hyp_minus_targets).T.dot(hyp_minus_targets) + self.regularizer_cost_function())
 
     def cost_function_derivative(self):
         """
         The derivative of the cost function for all params
         :returns: A nparam x 1 np array of the values of the derivatives of the parameters
         """
-        return 1./self.nobs*(self.hypothesis.features.T.dot(self.hypothesis_targets()))
+        return 1./self.nobs*(self.hypothesis.features.T.dot(self.hypothesis_targets()) + self.regularizer_cost_function_derivative())
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
         return self.convergence_value(current_cost, new_cost) < tolerance
 
     def convergence_value(self, current_cost, new_cost):
         return abs(current_cost[0] - new_cost[0])
-
-    def cost_function_tmp(self):
-        """
-        Computes the cost function the long way - not using hypothesis
-        """
-        return self.targets.T.dot(self.targets) - self.targets.T.dot(self.hypothesis.features
-                ).dot(self.get_parameters()) - self.get_parameters().T.dot(self.hypothesis.features.T
-                        ).dot(self.targets) + self.get_parameters().T.dot(self.hypothesis.features.T
-                                ).dot(self.hypothesis.features).dot(self.get_parameters())
-
-    def cost_function_derivative_int(self):
-        """
-        The derivative of the cost function wrt intercept param
-        :returns: A 1 x 1 np array of the value of the derivative of the cost function
-         wrt the intercept param
-        """
-        return 1./self.nobs*ones(self.nobs).reshape(1, self.nobs).dot(self.hypothesis_targets())
-
-    def cost_function_derivative_slope(self):
-        """
-        The derivative of the cost function wrt slope param
-        :returns: A 1 x 1 np array of the value of the derivative of the cost function
-         wrt the slope param
-        """
-        return 1./self.nobs*(self.hypothesis_targets()).T.dot(self.hypothesis.features)

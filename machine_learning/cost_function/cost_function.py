@@ -4,10 +4,10 @@ Has a hypothesis and targets
 This is a function of the parameters.
 The list of parameters are found in the Hypothesis object
 """
-
+from machine_learning.cost_function.regularizer import Regularizer
 
 class CostFunction(object):
-    def __init__(self, hypothesis, targets=None):
+    def __init__(self, hypothesis, targets=None, regularizer_name=None, regularization_weight=0):
         """
         Cost function for machine learning algorithm
         will be implemented by a specific machine learning
@@ -16,6 +16,9 @@ class CostFunction(object):
         self.hypothesis = hypothesis
         self.targets = targets
         self.nobs = self.targets.shape[0]
+        self.nparams = self.hypothesis.nparams
+        self.regularizer_name = regularizer_name
+        self.regularization_weight = regularization_weight
 
     def initialize_parameters(self, param_dict=None):
         """
@@ -81,6 +84,18 @@ class CostFunction(object):
         :returns: A float value representing the convergence value
         """
         raise NotImplementedError
+
+    def set_regularization_matrix(self):
+        raise NotImplementedError
+
+    def regularizer_cost_function(self):
+        regularization_value = Regularizer.regularizer_cost_function(self.regularizer_name
+                 , self.regularization_matrix, self.get_parameters())
+        return regularization_value
+
+    def regularizer_cost_function_derivative(self):
+        return Regularizer.regularizer_cost_function_derivative(self.regularizer_name
+                , self.regularization_matrix, self.get_parameters())
 
     def variance_covariance_matrix(self):
         return None

@@ -13,6 +13,10 @@ MULTIPLE_LINEAR_REGRESSION_SLOPE_1 = 1.00059136
 MULTIPLE_LINEAR_REGRESSION_SLOPE_2 = 1.07096345
 MULTIPLE_LINEAR_REGRESSION_RESIDUAL_VARIANCE = 36.49787789
 
+MULTIPLE_LINEAR_RIDGE_REGRESSION_INTERCEPT = 101.28964862
+MULTIPLE_LINEAR_RIDGE_REGRESSION_SLOPE_1 = 0.99954165
+MULTIPLE_LINEAR_RIDGE_REGRESSION_SLOPE_2 = 1.06966768
+
 LOGISTIC_REGRESSION_INTERCEPT = -0.62494949
 LOGISTIC_REGRESSION_SLOPE = 0.0128923
 
@@ -48,6 +52,14 @@ class TestIntegration(object):
         assert_almost_equals(parameters[0,0], MULTIPLE_LINEAR_REGRESSION_INTERCEPT, places=4)
         assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_1, places=4)
         assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_REGRESSION_SLOPE_2, places=4)
+
+    def test_multiple_linear_ridge_regression_squared_error_loss_batch_gradient_descent_run(self):
+        inputs = ["--input-data-file", "data/input/sample_data.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", 'multiple_linear_regression', "--cost-function-name", 'squared_error_loss', "--algorithm-name", "batch_gradient_descent", "--learning-rate", "0.0001", "--tolerance", '.0000000001', "--regularizer-name", "ridge", "--regularization-weight", "5"]
+        learning_model_obj = runmain.main(inputs)
+        parameters = learning_model_obj.get_parameter_point_estimates()
+        assert_almost_equals(parameters[0,0], MULTIPLE_LINEAR_RIDGE_REGRESSION_INTERCEPT, places=4)
+        assert_almost_equals(parameters[1,0], MULTIPLE_LINEAR_RIDGE_REGRESSION_SLOPE_1, places=4)
+        assert_almost_equals(parameters[2,0], MULTIPLE_LINEAR_RIDGE_REGRESSION_SLOPE_2, places=4)
 
     # def test_multiple_linear_regression_maximum_likelihood_batch_gradient_descent_run(self):
         # inputs = ["--input-data-file", "data/input/sample_data.csv", "--number-features", '2', "--number-targets", '1', "--hypothesis-name", 'multiple_linear_regression', "--cost-function-name", 'maximum_likelihood_normal_distribution', "--algorithm-name", "batch_gradient_descent", "--learning-rate", "0.0001", "--tolerance", '.0000000001']
