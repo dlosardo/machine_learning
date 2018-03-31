@@ -8,6 +8,14 @@ in matrix form in general:
     cost_function = 1/2*nobs(Hypothesis - Y)'%*%(Hypothesis - Y)
 ' is the transpose operation
 %*% is matrix multiplication
+
+Regularization can also be applied. It is an additive function depending
+on the type of regularization and the weight. Thus, the final cost
+function is:
+    cost_function = 1/2*nobs( (Hypothesis - Y)'%*%(Hypothesis - Y) + r(THETA))
+where r(THETA) is the regularization function being applied to the parameter
+vector. For square error loss, this does not include the intercept parameter.
+If no regularizer is requested, then r(THETA) reduces to 0.
 """
 from machine_learning.cost_function.cost_function import CostFunction
 from numpy import ones, zeros, fill_diagonal, array, hstack, square
@@ -49,7 +57,8 @@ class SquaredErrorLoss(CostFunction):
          value of the cost function
         """
         hyp_minus_targets = self.hypothesis_targets()
-        return ((1./(2.*self.nobs))*(hyp_minus_targets).T.dot(hyp_minus_targets) + self.regularizer_cost_function())
+        return (1./(2.*self.nobs))*((hyp_minus_targets).T.dot(hyp_minus_targets) +
+                  self.regularizer_cost_function())
 
     def cost_function_derivative(self):
         """

@@ -15,7 +15,7 @@ class CostFunction(object):
         """
         self.hypothesis = hypothesis
         self.targets = targets
-        self.nobs = self.targets.shape[0]
+        self.nobs = self.hypothesis.nobs
         self.nparams = self.hypothesis.nparams
         self.regularizer_name = regularizer_name
         self.regularization_weight = regularization_weight
