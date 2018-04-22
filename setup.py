@@ -26,7 +26,10 @@ setup(name='machine_learning',
     author_email='dlosardo@gmail.com',
     version='0.1',
     install_requires=get_requirements(),
-    packages=['machine_learning'],
-    package_dir={'machine_learning': ''},
+    packages=['machine_learning', 'machine_learning/model_utils'
+              , 'machine_learning/utils', 'machine_learning/algorithm'
+              , 'machine_learning/driver', 'machine_learning/cost_function'
+              , 'machine_learning/hypothesis'],
+    package_dir={'machine-learning': ''},
     scripts=['bin/run.py']
 )
