@@ -16,16 +16,20 @@ class Perceptron(Hypothesis):
         super(Perceptron, self).__init__(features)
         self.set_parameters()
         # Next line adds a vector of 1s indicating the bias.
-        # self.features becomes a matrix of dimension nobs x nx with the first column
-         # consisting of 1s and the next columns consisting of x values.
+        # self.features becomes a matrix of dimension nobs x nx
+        # with the first column
+        # consisting of 1s and the next columns consisting of x values.
         self.features = add_constant(self.features)
 
     def set_parameters(self):
         self.nparams = self.nfeatures + 1
-        bias = Parameter(name="bias", value=None, variance=None, default_starting_value=0.)
+        bias = Parameter(
+            name="bias", value=None, variance=None, default_starting_value=0.)
         self.parameter_list.add_parameter(bias)
         for i in range(0, self.features.shape[1]):
-            tmp_weight = Parameter(name="weight_{}".format(i), value=None, variance=None, default_starting_value=0.)
+            tmp_weight = Parameter(
+                name="weight_{}".format(i), value=None,
+                variance=None, default_starting_value=0.)
             self.parameter_list.add_parameter(tmp_weight)
 
     def hypothesis_function(self, index):
@@ -48,6 +52,6 @@ class Perceptron(Hypothesis):
         Calculates the distance of the input from the hyperplane
         gm_i = weights%*%x_i / ||weights||
         """
-        gm = self.features[index, :].dot(self.get_parameters()) / norm(self.get_parameters())
+        gm = self.features[index, :].dot(
+            self.get_parameters()) / norm(self.get_parameters())
         return gm
-

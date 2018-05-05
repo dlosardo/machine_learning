@@ -18,30 +18,37 @@ vector. For square error loss, this does not include the intercept parameter.
 If no regularizer is requested, then r(THETA) reduces to 0.
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import ones, zeros, fill_diagonal, array, hstack, square
+from numpy import ones, zeros, fill_diagonal, array, hstack
 
 
 class SquaredErrorLoss(CostFunction):
-    def __init__(self, hypothesis, targets, regularizer_name=None, regularization_weight=0):
+    def __init__(self, hypothesis, targets, regularizer_name=None,
+                 regularization_weight=0):
         """
         Squared error loss cost function
         :param: hypothesis A hypothesis object, e.g., SimpleLinearRegression
         :param: targets A nobs x 1 np array of y values
-        :param regularizer_name: A string representing the name of the regularizer
+        :param regularizer_name: A string representing the
+            name of the regularizer
         :param regularization_weight: A float of the weight for the regularizer
         """
-        super(SquaredErrorLoss, self).__init__(hypothesis, targets, regularizer_name, regularization_weight)
+        super(SquaredErrorLoss, self).__init__(hypothesis, targets,
+                                               regularizer_name,
+                                               regularization_weight)
         self.set_regularization_matrix()
 
     def set_regularization_matrix(self):
         """
         Sets the regularization matrix.
-        The intercept is not affected in the calculation thus the matrix 'picks' out only the
+        The intercept is not affected in the calculation thus
+            the matrix 'picks' out only the
         slope parameters.
         """
         self.regularization_matrix = zeros((self.nparams, self.nparams), float)
-        fill_diagonal(self.regularization_matrix, hstack((array([0]), ones(self.nparams - 1))))
-        self.regularization_matrix = self.regularization_weight * self.regularization_matrix
+        fill_diagonal(self.regularization_matrix, hstack((
+            array([0]), ones(self.nparams - 1))))
+        self.regularization_matrix = (self.regularization_weight *
+                                      self.regularization_matrix)
 
     def hypothesis_targets(self):
         """
@@ -57,15 +64,19 @@ class SquaredErrorLoss(CostFunction):
          value of the cost function
         """
         hyp_minus_targets = self.hypothesis_targets()
-        return (1./(2.*self.nobs))*((hyp_minus_targets).T.dot(hyp_minus_targets) +
+        return (1./(2.*self.nobs))*((hyp_minus_targets).T.dot(
+            hyp_minus_targets) +
                   self.regularizer_cost_function())
 
     def cost_function_derivative(self):
         """
         The derivative of the cost function for all params
-        :returns: A nparam x 1 np array of the values of the derivatives of the parameters
+        :returns: A nparam x 1 np array of the values of the
+            derivatives of the parameters
         """
-        return 1./self.nobs*(self.hypothesis.features.T.dot(self.hypothesis_targets()) + self.regularizer_cost_function_derivative())
+        return 1./self.nobs*(self.hypothesis.features.T.dot(
+            self.hypothesis_targets()) +
+            self.regularizer_cost_function_derivative())
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
         return self.convergence_value(current_cost, new_cost) < tolerance

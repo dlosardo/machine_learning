@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}ML{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/vendor/bootstrap.min.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/vendor/fa-regular.min.css') }}">
+    <script
+          src="http://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
+    <style>
+      body {
+        padding-bottom: 20px;
+        margin-bottom: 60px;
+        }
+       html {
+          position: relative;
+          min-height: 100%;
+        }
+        .lg-margin-bottom {
+          margin-bottom: 60px;
+        }
+
+        .lg-margin-top {
+          margin-top: 60px;
+        }
+
+        .md-margin-top {
+          margin-top: 40px;
+        }
+
+        .sm-margin-top {
+          margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">ML</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarCollapse" style>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('main.home') }}">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.cats') }}">Cat Page Test</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('model_builder.models') }}">Model Builder</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('user.all_users') }}">User List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('user.users') }}">Create User</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+    <main class="container">
+       <div class="md-margin-top">
+        <!--<h1><a href="{{ url_for('user.show_user_info', username='diane') }}">diane</a></h1>-->
+        <!--<h1><a href="{{ url_for('user.show_user_info', username='leon') }}">leon</a></h1>-->
+        <!--<h1><a href="{{ url_for('user.show_user_info', username='Rainy') }}">Rainy</a></h1>-->
+        </div>
+    {% block body %}
+    {% endblock %}
+    </main>
+    <script
+      src="{{ url_for('static', filename='scripts/vendor/bootstrap.bundle.min.js') }}">
+    </script>
+</body>
+</html>

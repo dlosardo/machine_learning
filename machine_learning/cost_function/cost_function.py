@@ -6,8 +6,10 @@ The list of parameters are found in the Hypothesis object
 """
 from machine_learning.cost_function.regularizer import Regularizer
 
+
 class CostFunction(object):
-    def __init__(self, hypothesis, targets=None, regularizer_name=None, regularization_weight=0):
+    def __init__(self, hypothesis, targets=None,
+                 regularizer_name=None, regularization_weight=0):
         """
         Cost function for machine learning algorithm
         will be implemented by a specific machine learning
@@ -23,14 +25,16 @@ class CostFunction(object):
     def initialize_parameters(self, param_dict=None):
         """
         Initializes the parameter values
-        :param param_dict: A dictionary with the form parameter_name: parameter_value
+        :param param_dict: A dictionary with the form:
+            parameter_name: parameter_value
         """
         self.hypothesis.initialize_parameters(param_dict)
 
     def update_parameters(self, param_array):
         """
         Updates parameter values
-        :param param_array: A numpy array of dimension nparams x 1 consisting of
+        :param param_array: A numpy array of dimension:
+            nparams x 1 consisting of
          parameter values.
         """
         self.hypothesis.update_parameters(param_array)
@@ -60,7 +64,8 @@ class CostFunction(object):
         """
         This calcualtes the partial derivative of the cost function
         with respect to the parameters
-        :returns: A nparam x 1 np array of the values of the derivatives of the parameters
+        :returns: A nparam x 1 np array of the values of the
+            derivatives of the parameters
         """
         raise NotImplementedError
 
@@ -68,19 +73,26 @@ class CostFunction(object):
         """
         Calculates whether the convergence criteria has been met.
         In general is calculated as: |f(x_i) - f(x_i -1)| < tolerance
-        where f(x_i) is the cost at iteration i and f(x_i -1) is the cost at iteration i-1.
-        :param current_cost: A 1x1 numpy array with the first element a float representing the current cost associated with the algorithm
-        :param new_cost: A 1x1 numpy array with the first element a float representing the new cost associated with the algorithm
-        :param tolerance: A float value specifying the point at which convergence has been reached
-        :returns: True if the convergence criteria has been met, false otherwise
+        where f(x_i) is the cost at iteration i and f(x_i -1)
+            is the cost at iteration i-1.
+        :param current_cost: A 1x1 numpy array with the first element
+            a float representing the current cost associated with the algorithm
+        :param new_cost: A 1x1 numpy array with the first element a float
+            representing the new cost associated with the algorithm
+        :param tolerance: A float value specifying the point at which
+            convergence has been reached
+        :returns: True if the convergence criteria has been met,
+            false otherwise
         """
         raise NotImplementedError
 
     def convergence_value(self, current_cost, new_cost):
         """
         Calculates the convergence value
-        :param current_cost: A 1x1 numpy array with the first element a float representing the current cost associated with the algorithm
-        :param new_cost: A 1x1 numpy array with the first element a float representing the new cost associated with the algorithm
+        :param current_cost: A 1x1 numpy array with the first element
+            a float representing the current cost associated with the algorithm
+        :param new_cost: A 1x1 numpy array with the first element a float
+            representing the new cost associated with the algorithm
         :returns: A float value representing the convergence value
         """
         raise NotImplementedError
@@ -89,13 +101,15 @@ class CostFunction(object):
         raise NotImplementedError
 
     def regularizer_cost_function(self):
-        regularization_value = Regularizer.regularizer_cost_function(self.regularizer_name
-                 , self.regularization_matrix, self.get_parameters())
+        regularization_value = Regularizer.regularizer_cost_function(
+            self.regularizer_name, self.regularization_matrix,
+            self.get_parameters())
         return regularization_value
 
     def regularizer_cost_function_derivative(self):
-        return Regularizer.regularizer_cost_function_derivative(self.regularizer_name
-                , self.regularization_matrix, self.get_parameters())
+        return Regularizer.regularizer_cost_function_derivative(
+            self.regularizer_name, self.regularization_matrix,
+            self.get_parameters())
 
     def variance_covariance_matrix(self):
         return None

@@ -35,7 +35,8 @@ class Hypothesis(object):
     def update_parameters(self, param_array):
         """
         Update parameter values
-        :param param_array: A numpy array of parameter values of dimension nparms x 1
+        :param param_array: A numpy array of parameter
+            values of dimension nparms x 1
         """
         self.parameter_list.update_parameters(param_array)
 

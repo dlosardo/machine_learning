@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Model Builder{% endblock %}
+{% block body %}
+  <p>Please select model attributes:</p>
+    <div class="col-md-10 col-md-offset-2 well">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col">
+                    {{ form.hypothesis.label }}
+                    {{ form.hypothesis() }}
+                </div>
+                <div class="col">
+                    {{ form.regularizer.label }}
+                    {{ form.regularizer() }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ form.cost_function.label }} {{ form.cost_function() }}
+                </div>
+                <div class="col">
+                    {{ form.algorithm.label }} {{ form.algorithm() }}
+                </div>
+            </div>
+            {{ form.submit() }}
+        </form>
+    </div>
+    {% if hypothesis %} <h1> Hypothesis chosen: {{hypothesis}}</h1>
+    {% endif %}
+    {% if regularizer %} <h1> Regularizer chosen: {{regularizer}}</h1>
+    {% endif %}
+    {% if cost_function %} <h1> Cost Function chosen: {{cost_function}}</h1>
+    {% endif %}
+    {% if algorithm %} <h1> Algorithm chosen: {{algorithm}}</h1>
+    {% endif %}
+{% endblock %}

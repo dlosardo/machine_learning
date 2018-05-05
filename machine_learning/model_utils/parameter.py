@@ -1,18 +1,20 @@
 """
 Parameter Class
 """
-from numpy import hstack, diag, sqrt, ndarray
+from numpy import hstack, sqrt, ndarray
 import sympy as sp
 from tabulate import tabulate
 import itertools
-from machine_learning.utils.exceptions import ParameterValuesNotInitialized, IncorrectMatrixDimensions
+from machine_learning.utils.exceptions import (
+    ParameterValuesNotInitialized, IncorrectMatrixDimensions)
 
 
 class Parameter(object):
     def __init__(self, name, value, variance, default_starting_value):
         """
         Constructor
-        Parameter has a name, a value, a variance, and a default starting value.
+        Parameter has a name, a value, a variance,
+            and a default starting value.
         Name must be a string.
         Value must be None or a float.
         Variance must be None or a float.
@@ -76,6 +78,8 @@ class Parameter(object):
 """
 ParameterList Class
 """
+
+
 class ParameterList(object):
     def __init__(self):
         """
@@ -103,7 +107,9 @@ class ParameterList(object):
         if not isinstance(parameter_object, Parameter):
             raise TypeError("Must be a Parameter object")
         elif self.contains_parameter(parameter_object):
-            raise Exception("Parameter {} already in list, cannot add again".format(parameter_object))
+            raise Exception(
+                "Parameter {} already in list, cannot add again".format(
+                    parameter_object))
         else:
             self.size = self.size + 1
             self.parameter_list.append(parameter_object)
@@ -115,7 +121,8 @@ class ParameterList(object):
         each Parameter in the list.
         If a param_dict does not contain the parameter, uses the
         default_starting_value of corresponding Parameter
-        :param param_dict: A python dictionary in the form {param_name: param_value}
+        :param param_dict: A python dictionary in the form
+            {param_name: param_value}
         """
         if self.size == 0:
             return
@@ -132,7 +139,8 @@ class ParameterList(object):
 
     def all_parameters_initialized(self):
         """
-        Checks whether all of the parameters in the parameter_list are initialized
+        Checks whether all of the parameters in the
+            parameter_list are initialized
         :returns: True if all parameters are initialized, False otherwise
         """
         if self.size == 0:
@@ -144,22 +152,28 @@ class ParameterList(object):
 
     def set_parameter_variances(self, param_variance_list):
         """
-        Given a list of parameter variances, sets the variance values on each Parameter
-        :param param_variance_list: A list of float values equal to the size of parameter_list
+        Given a list of parameter variances, sets the variance
+            values on each Parameter
+        :param param_variance_list: A list of float values equal
+            to the size of parameter_list
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
         if not isinstance(param_variance_list, list):
             raise TypeError("param_variance_list must be a list")
         if len(param_variance_list) != self.size:
-            raise TypeError("param_variance_list must be length {}, found length {}".format(self.size
-                , len(param_variance_list)))
+            raise TypeError(
+                '''param_variance_list must be length {},
+                found length {}'''.format(self.size,
+                                          len(param_variance_list)))
         for i, param in enumerate(self.parameter_list):
             param.variance = param_variance_list[i]
 
     def set_covariance_matrix(self, cov_matrix):
-        #TODO: check to see if the variance value is the same, if not throw exception
-        #TODO: make methods for getting value and variance by name and covariance by pair of names
+        # TODO: check to see if the variance value is the same,
+        # if not throw exception
+        # TODO: make methods for getting value and variance by
+        # name and covariance by pair of names
         """
         Sets the covariance matrix of the Parameters in parameter_list
         """
@@ -168,16 +182,23 @@ class ParameterList(object):
         if not isinstance(cov_matrix, ndarray):
             raise TypeError("cov_matrix must be a Numpy Array object")
         if cov_matrix.ndim != 2:
-            raise IncorrectMatrixDimensions("cov_matrix must be two dimensions, found {} dimensions".format(cov_matrix.ndim))
-        if not (cov_matrix.shape[0] == self.size and cov_matrix.shape[1] == self.size):
-            raise IncorrectMatrixDimensions("cov_matrix must be {} by {}, found {} by {}".format(self.size
-                , self.size, cov_matrix.shape[0], cov_matrix.shape[1]))
+            raise IncorrectMatrixDimensions(
+                '''cov_matrix must be two dimensions,
+                found {} dimensions'''.format(cov_matrix.ndim))
+        if not (cov_matrix.shape[0] == self.size and
+                cov_matrix.shape[1] == self.size):
+            raise IncorrectMatrixDimensions(
+                '''cov_matrix must be {} by {},
+                found {} by {}'''.format(self.size, self.size,
+                                         cov_matrix.shape[0],
+                                         cov_matrix.shape[1]))
         self.parameter_covariance_matrix = cov_matrix
 
     def update_parameters(self, param_array):
         """
         Updates the values of each parameter from the given param_array
-        :param param_array: A Numpy Array object of dimension size of parameter_list by 1
+        :param param_array: A Numpy Array object of dimension size
+            of parameter_list by 1
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
@@ -187,10 +208,16 @@ class ParameterList(object):
         if not isinstance(param_array, ndarray):
             raise TypeError("param_array must be a Numpy Array object")
         if param_array.ndim != 2:
-            raise TypeError("param_array must be two dimensions, found {} dimensions".format(param_array.ndim))
-        if not (param_array.shape[0] == self.size and param_array.shape[1] == 1):
-            raise TypeError("param_array must be of dimension {} by {}, found {} by {}".format(
-                self.size, 1, param_array.shape[0], param_array.shape[1]))
+            raise TypeError(
+                '''param_array must be two dimensions,
+                found {} dimensions'''.format(param_array.ndim))
+        if not (param_array.shape[0] == self.size and
+                param_array.shape[1] == 1):
+            raise TypeError(
+                '''param_array must be of dimension {} by {},
+                found {} by {}'''.format(self.size, 1,
+                                         param_array.shape[0],
+                                         param_array.shape[1]))
         for i, param in enumerate(self.parameter_list):
             param.value = param_array[i][0]
 
@@ -205,8 +232,10 @@ class ParameterList(object):
         if self.size == 0:
             raise Exception("Parameter List is empty")
         if not self.all_parameters_initialized():
-            raise ParameterValuesNotInitialized("Not all parameters are initialized")
-        return hstack((param.value for param in self.parameter_list)).reshape(self.size, 1)
+            raise ParameterValuesNotInitialized(
+                "Not all parameters are initialized")
+        return hstack((param.value for param in self.parameter_list)).reshape(
+            self.size, 1)
 
     def get_parameter_by_name(self, parameter_name):
         """
@@ -227,7 +256,9 @@ class ParameterList(object):
         if self.size == 0:
             raise Exception("Parameter List is empty")
         if (index < 0) or (index >= self.size):
-            raise IndexError("index out of bounds, must be between 0 and {}".format(self.size - 1))
+            raise IndexError(
+                "index out of bounds, must be between 0 and {}".format(
+                    self.size - 1))
         return self.parameter_list[index]
 
     def get_parameter_names(self):
@@ -249,25 +280,30 @@ class ParameterList(object):
         if not self.all_parameters_initialized():
             raise Exception("Not all parameters are initialized")
         parameters_tmp = [self.get_parameter_by_name(name)
-                            for name in name_list
-                            if self.contains_parameter_by_name(name)]
+                          for name in name_list
+                          if self.contains_parameter_by_name(name)]
         if len(parameters_tmp) == 0:
             raise Exception("No parameter names in parameter list")
-        return hstack((param.value for param in parameters_tmp)).reshape(len(parameters_tmp), 1)
+        return hstack((param.value for param in parameters_tmp)).reshape(
+            len(parameters_tmp), 1)
 
     def get_parameter_values_not_in_list(self, param_list):
         """
-        Given a list of parameter objects, returns parameter values for Parameters found in
+        Given a list of parameter objects, returns parameter
+            values for Parameters found in
         parameter_list but NOT found in param_list
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
         if not self.all_parameters_initialized():
             raise Exception("Not all parameters are initialized")
-        parameters_tmp = [param for param in self.parameter_list if param not in param_list]
+        parameters_tmp = [param
+                          for param in self.parameter_list
+                          if param not in param_list]
         if len(parameters_tmp) == 0:
             raise Exception("All parameters in parameter list")
-        return hstack((param.value for param in parameters_tmp)).reshape(len(parameters_tmp), 1)
+        return hstack((param.value for param in parameters_tmp)).reshape(
+            len(parameters_tmp), 1)
 
     def get_parameter_variances(self):
         """
@@ -276,7 +312,8 @@ class ParameterList(object):
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
-        return hstack((param.variance for param in self.parameter_list)).reshape(self.size, 1)
+        return hstack((param.variance
+                       for param in self.parameter_list)).reshape(self.size, 1)
 
     def get_parameter_standard_errors(self):
         """
@@ -285,7 +322,10 @@ class ParameterList(object):
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
-        return hstack((sqrt(param.variance) if param.variance is not None else None for param in self.parameter_list)).reshape(self.size, 1)
+        return hstack((sqrt(param.variance)
+                       if param.variance is not None
+                       else None
+                       for param in self.parameter_list)).reshape(self.size, 1)
 
     def contains_parameter(self, parameter_object):
         """
@@ -308,8 +348,8 @@ class ParameterList(object):
         Checks whether the parameter_list contains a parameter object by
         looking for its name
         :param parameter_name: A string representing a parameter name
-        :returns: True if parameter_list contains the Parameter object associated
-            with the name, False otherwise
+        :returns: True if parameter_list contains the Parameter
+            object associated with the name, False otherwise
         """
         if self.size == 0:
             return False
@@ -322,14 +362,15 @@ class ParameterList(object):
 
     def parameter_index(self, parameter_object):
         """
-        Given a parameter object, obtains the index it is located at in parameter_list
+        Given a parameter object, obtains the index it is
+            located at in parameter_list
         :param parameter_object: An object of type Parameter
         """
         if self.size == 0:
             raise Exception("Parameter List is empty")
         if not isinstance(parameter_object, Parameter):
             raise TypeError("Must be a Parameter object")
-        index=0
+        index = 0
         for parameter_ in self.parameter_list:
             if parameter_ == parameter_object:
                 return index
@@ -341,7 +382,7 @@ class ParameterList(object):
         Removes the given parameter from parameter_list
         :param parameter_object: An object of type Parameter
         """
-        if self.size==0:
+        if self.size == 0:
             raise Exception("Parameter list is empty, nothing to remove")
         if not isinstance(parameter_object, Parameter):
             raise TypeError("Must be a Parameter object")
@@ -359,7 +400,8 @@ class ParameterList(object):
             raise Exception("Parameter List is empty")
         param_names = self.get_parameter_names()
         for param_name in param_names:
-            self.remove_parameter_from_parameter_object(self.get_parameter_by_name(param_name))
+            self.remove_parameter_from_parameter_object(
+                self.get_parameter_by_name(param_name))
 
     # def parameter_covariance_matrix(self):
         # return diag([param.variance for param in self.parameter_list])
@@ -373,27 +415,35 @@ class ParameterList(object):
 
     def set_parameter_covariance_matrix_symbolic(self):
         """
-        Creates a symbolic covariance matrix representing all pairs of covariances
-        of parameter in the off-diagonal and parameter variances in the diagonal
+        Creates a symbolic covariance matrix representing
+            all pairs of covariances of parameter in the
+            off-diagonal and parameter variances in the diagonal
         """
         if self.size > 0:
             covariance_pairs = self.get_covariance_pairs()
-            self.symbolic_covariance_matrix = sp.Matrix(self.size, self.size, lambda i,j: sp.var(
-                                             'cov({}, {})'.format(covariance_pairs[i + j + (j*(self.size-1))][0],
-                                             covariance_pairs[i + j +(j*(self.size-1))][1])))
+            self.symbolic_covariance_matrix = sp.Matrix(
+                self.size, self.size, lambda i, j: sp.var(
+                    'cov({}, {})'.format(covariance_pairs[
+                        i + j + (j*(self.size-1))][0],
+                        covariance_pairs[i + j + (j*(self.size - 1))][1])))
 
     def get_covariance_pairs(self):
         """
         Obtains all pairs of parameters
         """
         if self.size > 0:
-            covariance_pairs = [i for i in itertools.product(self.get_parameter_names(), repeat=2)]
+            covariance_pairs = [i
+                                for i in itertools.product(
+                                    self.get_parameter_names(), repeat=2)]
             return covariance_pairs
 
     def print_parameters(self):
         """
         Prints the parameter names, point estimates, and standard errors
         """
-        names_values = list(zip(self.get_parameter_names(), list(self.get_parameters().ravel())
-            , list(self.get_parameter_standard_errors().ravel())))
-        print(tabulate(names_values, headers=['Parameter', 'Point Estimate', 'Standard Errors']))
+        names_values = list(zip(self.get_parameter_names(),
+                                list(self.get_parameters().ravel()),
+                                list(self.get_parameter_standard_errors(
+                                ).ravel())))
+        print(tabulate(names_values, headers=[
+            'Parameter', 'Point Estimate', 'Standard Errors']))

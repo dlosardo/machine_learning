@@ -36,7 +36,8 @@ class PerceptronCost(CostFunction):
         """
         y = self.targets[index, :].copy()
         y[y == 0] = -1
-        fm = y.T.dot(self.hypothesis.features[index, :].dot(self.get_parameters()))
+        fm = y.T.dot(
+            self.hypothesis.features[index, :].dot(self.get_parameters()))
         return fm
 
     def decision_boundary(self):

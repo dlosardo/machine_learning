@@ -25,9 +25,11 @@ from machine_learning.model_utils.model_setup import ModelSetup
 from machine_learning.model_utils.learning_model import LearningModel
 import machine_learning.utils.utils
 
+
 def get_input_data(input_data_file):
-    data = np.genfromtxt(input_data_file, dtype=float, delimiter = ',')
+    data = np.genfromtxt(input_data_file, dtype=float, delimiter=',')
     return data
+
 
 def extract_data(data, number_features, number_targets):
     # extract features
@@ -43,22 +45,28 @@ def extract_data(data, number_features, number_targets):
         targets = targets.reshape((len(targets), number_targets))
     return features, targets
 
-def run(input_data_file, number_features, number_targets, hypothesis_type, cost_function_type, algorithm_type
-        , regularizer_name, regularization_weight, learning_rate, tolerance, starting_parameter_values_file):
+
+def run(input_data_file, number_features, number_targets, hypothesis_type,
+        cost_function_type, algorithm_type, regularizer_name,
+        regularization_weight, learning_rate, tolerance,
+        starting_parameter_values_file):
     """
     """
     if starting_parameter_values_file is None:
         starting_parameter_values = None
-    #TODO: parse file to dict
+    # TODO: parse file to dict
     logging.info(input_data_file)
-    # setup model and check model dependencies (will fail loudly here if not set up properly)
-    model_setup_obj = ModelSetup(hypothesis_type, cost_function_type, algorithm_type)
+    # setup model and check model dependencies
+    # (will fail loudly here if not set up properly)
+    model_setup_obj = ModelSetup(
+        hypothesis_type, cost_function_type, algorithm_type)
     # read in data
     data = get_input_data(input_data_file)
     features, targets = extract_data(data, number_features, number_targets)
     # obtain algorithm object
-    algorithm_obj = model_setup_obj.model_setup(features, targets, regularizer_name
-            , regularization_weight, learning_rate, tolerance, starting_parameter_values)
+    algorithm_obj = model_setup_obj.model_setup(
+        features, targets, regularizer_name, regularization_weight,
+        learning_rate, tolerance, starting_parameter_values)
     # create learning model object and run model and print results
     learning_model_obj = LearningModel(algorithm_obj)
     learning_model_obj.run_model()

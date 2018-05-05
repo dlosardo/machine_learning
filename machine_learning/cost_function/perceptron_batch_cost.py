@@ -26,10 +26,13 @@ class PerceptronBatchCost(PerceptronCost):
 
     def cost_function_derivative(self):
         error_matrix = self.get_error_matrix()
-        return -1. * (1./(2.*self.nobs))*(error_matrix.T).dot(self.hypothesis.features).T
+        return -1. * (1./(2.*self.nobs))*(
+            error_matrix.T).dot(self.hypothesis.features).T
 
-    def convergence_criteria_met(self, current_cost, new_cost, tolerance):
-        return self.convergence_value(current_cost[0], new_cost[0]) <= tolerance
+    def convergence_criteria_met(self, current_cost, new_cost,
+                                 tolerance):
+        return self.convergence_value(
+            current_cost[0], new_cost[0]) <= tolerance
 
     def convergence_value(self, current_cost, new_cost):
         return new_cost[0]

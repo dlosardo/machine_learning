@@ -1,7 +1,8 @@
 """
 Abstract class for supervised algorithm
 """
-from machine_learning.algorithm.machine_learning_algorithm import MachineLearningAlgorithm
+from machine_learning.algorithm.machine_learning_algorithm import (
+    MachineLearningAlgorithm)
 
 
 class SupervisedAlgorithm(MachineLearningAlgorithm):
@@ -10,7 +11,8 @@ class SupervisedAlgorithm(MachineLearningAlgorithm):
         Supervised algorithm.
         Parameters are initialized in this constructor
         :param cost_function A CostFunction object, e.g., SquaredErrorLoss
-        :param param_starting_values A dict of the form parameter_name: parameter_value
+        :param param_starting_values A dict of the form:
+            parameter_name: parameter_value
         """
         super(SupervisedAlgorithm, self).__init__()
         self.cost_function = cost_function

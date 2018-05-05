@@ -34,11 +34,13 @@ class PerceptronOnlineCost(PerceptronCost):
 
     def cost_function_derivative(self, index):
         """
-        The partial derivative of the cost function with respect to the parameters
+        The partial derivative of the cost function with
+            respect to the parameters
         """
         y = self.hypothesis.hypothesis_function(index)
         return (self.targets[index] - y).dot(
-                self.hypothesis.features[index, :].reshape(1, self.hypothesis.nparams)).reshape(
+                self.hypothesis.features[index, :].reshape(
+                    1, self.hypothesis.nparams)).reshape(
                         self.hypothesis.nparams, 1)
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):

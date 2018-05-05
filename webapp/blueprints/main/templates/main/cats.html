@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Sleepy Cat{% endblock %}
+{% block body %}
+<div>
+<img src="{{ url_for('static', filename='images/rainy_socks.jpg',
+_external=True)}}">
+<img src="{{ url_for('static', filename='images/leonsleep.jpg',
+_external=True)}}">
+</div>
+{% endblock %}
