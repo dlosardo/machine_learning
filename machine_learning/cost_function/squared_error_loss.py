@@ -64,7 +64,7 @@ class SquaredErrorLoss(CostFunction):
          value of the cost function
         """
         hyp_minus_targets = self.hypothesis_targets()
-        return (1./(2.*self.nobs))*((hyp_minus_targets).T.dot(
+        return ((1./(2.*self.nobs))*(hyp_minus_targets).T.dot(
             hyp_minus_targets) +
                   self.regularizer_cost_function())
 
