@@ -40,3 +40,4 @@ coverage.xml
 .DS_Store
 database.db
 ipython-notebooks/
+instance/config.cfg
