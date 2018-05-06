@@ -4,9 +4,8 @@ from webapp.app import create_app
 from webapp.extensions import db
 from webapp.blueprints.user.models import User
 from webapp.blueprints.model_builder.models import ModelRun
-from webapp.config import DevConfig
 
-app = create_app(DevConfig)
+app = create_app()
 migrate = Migrate(app, db)
 manager = Manager(app)
 

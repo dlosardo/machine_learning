@@ -1,5 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, session
-from werkzeug.utils import secure_filename
+from flask import (
+    Blueprint, render_template, redirect,
+    url_for, session, request)
+# from werkzeug.utils import secure_filename
+from webapp.extensions import data_uploads
 from .forms import ModelForm, DataUploadForm
 
 model_builder = Blueprint('model_builder', __name__,
@@ -8,12 +11,23 @@ model_builder = Blueprint('model_builder', __name__,
 
 @model_builder.route('/models', methods=['GET', 'POST'])
 def models():
+    print(request)
     form = ModelForm()
     file_form = DataUploadForm()
     if file_form.validate_on_submit():
+        print(request.files)
+        """
+        looks like request.files['file'] (name of form)
+        and file_form.file.data is the same...
+        which to use?
+        """
+        print(request.files['file'])
         f = file_form.file.data
-        filename = secure_filename(f.filename)
-        session['f'] = filename
+        print(f)
+        # filename = secure_filename(f.filename)
+        session['f'] = f.mimetype
+        f1 = data_uploads.save(request.files['file'])
+        print(f1)
         return redirect(url_for('.models'))
     if form.validate_on_submit():
         session['hypothesis'] = form.hypothesis.data

@@ -2,7 +2,7 @@
 {% block title %}Model Builder{% endblock %}
 {% block body %}
   <p>Select file<p>
-    <form method="POST" enctype="mulipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         {{ file_form.hidden_tag() }}
         {{ file_form.file() }}
         {{ file_form.submit() }}
