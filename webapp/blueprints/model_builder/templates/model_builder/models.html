@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Model Builder{% endblock %}
 {% block body %}
+  <p>Select file<p>
+    <form method="POST" enctype="mulipart/form-data">
+        {{ file_form.hidden_tag() }}
+        {{ file_form.file() }}
+        {{ file_form.submit() }}
+    </form>
   <p>Please select model attributes:</p>
     <div class="col-md-10 col-md-offset-2 well">
         <form method="POST">
@@ -26,6 +32,8 @@
             {{ form.submit() }}
         </form>
     </div>
+    {% if f %} <h4> {{f}} </h4>
+    {% endif %}
     {% if hypothesis %} <h1> Hypothesis chosen: {{hypothesis}}</h1>
     {% endif %}
     {% if regularizer %} <h1> Regularizer chosen: {{regularizer}}</h1>

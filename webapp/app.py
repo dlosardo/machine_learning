@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 
-# from webapp.config import DevConfig
 from webapp.extensions import db
 from webapp.blueprints.main import main
 from webapp.blueprints.user import user
@@ -22,7 +21,6 @@ def create_app(settings_override=None):
     """
     app = Flask(__name__, instance_relative_config=True)
     configure_app(app, settings_override)
-    # app.config.from_object("webapp.config.DevConfig")
     app.register_blueprint(main)
     app.register_blueprint(user)
     app.register_blueprint(model_builder)

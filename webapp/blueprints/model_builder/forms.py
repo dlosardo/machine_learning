@@ -1,7 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, RadioField
+from flask_wtf.file import FileField, FileRequired
 from machine_learning.model_utils.factories import (
     HypothesisTypes, CostFunctionTypes, AlgorithmTypes, RegularizerTypes)
+
+
+class DataUploadForm(FlaskForm):
+    file = FileField(validators=[FileRequired()])
+    submit = SubmitField('Submit File')
 
 
 class ModelForm(FlaskForm):
