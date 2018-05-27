@@ -21,7 +21,7 @@ class ModelSetup(object):
         self.hypothesis_type = hypothesis_type
         self.cost_function_type = cost_function_type
         self.algorithm_type = algorithm_type
-        self.check_dependencies()
+        # self.check_dependencies()
 
     def check_dependencies(self):
         """

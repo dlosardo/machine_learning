@@ -2,6 +2,12 @@
 docker-compose exec website py.test webapp/tests
 docker-compose exec website py.test --cov-report term-missing --cov webapp
 docker-compose exec website flake8 . --exclude __init__.py
+docker-compose rm -f
+docker rmi -f $(docker images -qf dangling=true)
+docker images -f dangling=true
+
+with _app.test_request_context():
+    f = FinalModelForm()
 """
 import pytest
 from webapp.app import create_app

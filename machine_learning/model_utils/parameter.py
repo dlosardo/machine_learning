@@ -447,3 +447,22 @@ class ParameterList(object):
                                 ).ravel())))
         print(tabulate(names_values, headers=[
             'Parameter', 'Point Estimate', 'Standard Errors']))
+
+    def return_printed_results(self):
+        """
+        Prints the parameter names, point estimates, and standard errors
+        """
+        names_values = list(zip(self.get_parameter_names(),
+                                list(round(i, 2)
+                                     for i in self.get_parameters().ravel()),
+                                list(round(i, 2)
+                                     if i else i
+                                     for i in
+                                     self.get_parameter_standard_errors().
+                                     ravel()
+                                     )
+                                )
+                            )
+        names_values.insert(0, ('Parameter', 'Point Estimate',
+                            'Standard Errors'))
+        return names_values

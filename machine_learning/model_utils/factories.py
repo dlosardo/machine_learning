@@ -20,6 +20,18 @@ class Types(Enum):
     def names_list(cls):
         return [type_.name.lower() for type_ in list(cls)]
 
+    @classmethod
+    def tuple_pair(cls):
+        return list(zip(map(lambda x: str(x),
+                            cls.values_list()),
+                        map(lambda x: x.replace("_", " "),
+                            cls.names_list())))
+
+    @classmethod
+    def get_type_from_number(cls, number):
+        return [i for i in cls
+                if i.value == number][0]
+
 
 class HypothesisTypes(Types):
     SIMPLE_LINEAR_REGRESSION = 1

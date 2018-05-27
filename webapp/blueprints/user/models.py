@@ -1,6 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
-from webapp.blueprints.model_builder.models import ModelRun
 from webapp.extensions import db
 
 

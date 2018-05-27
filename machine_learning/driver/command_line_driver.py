@@ -60,6 +60,8 @@ def run(input_data_file, number_features, number_targets, hypothesis_type,
     # (will fail loudly here if not set up properly)
     model_setup_obj = ModelSetup(
         hypothesis_type, cost_function_type, algorithm_type)
+    # validate model setup
+    model_setup_obj.check_dependencies()
     # read in data
     data = get_input_data(input_data_file)
     features, targets = extract_data(data, number_features, number_targets)

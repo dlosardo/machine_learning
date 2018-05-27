@@ -1,37 +1,38 @@
 {% extends "base.html" %}
+{% import 'macros/form.html' as form_macro with context%}
 {% block title %}Model Builder{% endblock %}
 {% block body %}
-  <p>Select file<p>
+  <p>Please select model attributes and file</p>
     <form method="POST" enctype="multipart/form-data">
-        {{ file_form.hidden_tag() }}
-        {{ file_form.file() }}
-        {{ file_form.submit() }}
+        {{ final.hidden_tag() }}
+        {% for f in final.data_form.form if f.widget.input_type != 'hidden'%}
+            {{ form_macro.form_basic(f) }}
+        {% endfor %}
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col">
+                    {{ form_macro.form_basic(final.model_attribute_form.hypothesis) }}
+                </div>
+                <div class="col">
+                    {{ form_macro.form_basic(final.model_attribute_form.regularizer) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ form_macro.form_basic(final.model_attribute_form.cost_function) }}
+                </div>
+                <div class="col">
+                    {{ form_macro.form_basic(final.model_attribute_form.algorithm) }}
+                </div>
+            </div>
+            <div>
+                {% for f in final.hyperparam_form.form if f.widget.input_type != 'hidden'%}
+                    {{ form_macro.form_basic(f) }}
+                {% endfor %}
+            </div>
+            {{ form_macro.form_basic(final.submit) }}
+        </div>
     </form>
-  <p>Please select model attributes:</p>
-    <div class="col-md-10 col-md-offset-2 well">
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="row">
-                <div class="col">
-                    {{ form.hypothesis.label }}
-                    {{ form.hypothesis() }}
-                </div>
-                <div class="col">
-                    {{ form.regularizer.label }}
-                    {{ form.regularizer() }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    {{ form.cost_function.label }} {{ form.cost_function() }}
-                </div>
-                <div class="col">
-                    {{ form.algorithm.label }} {{ form.algorithm() }}
-                </div>
-            </div>
-            {{ form.submit() }}
-        </form>
-    </div>
     {% if f %} <h4> {{f}} </h4>
     {% endif %}
     {% if hypothesis %} <h1> Hypothesis chosen: {{hypothesis}}</h1>

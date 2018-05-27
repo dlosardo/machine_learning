@@ -38,6 +38,11 @@ class LearningModel(object):
             (print(self.algorithm_obj.cost_function.hypothesis.parameter_list.
                    symbolic_covariance_matrix))
 
+    def get_results(self):
+        if self.converged:
+            return (self.algorithm_obj.cost_function.hypothesis.parameter_list.
+                    return_printed_results())
+
     def get_parameter_point_estimates(self):
         if self.converged:
             return (

@@ -13,3 +13,11 @@ class UserForm(FlaskForm):
         validators=[DataRequired(), Length(max=255, min=8)]
     )
     submit = SubmitField('Submit')
+
+
+class SimpleSignInForm(FlaskForm):
+    name = StringField(
+        'Name',
+        validators=[DataRequired(), Length(max=255)]
+    )
+    submit = SubmitField('Submit')

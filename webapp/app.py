@@ -34,7 +34,7 @@ def configure_app(app, settings_override):
     app.config.from_object(config[config_name])
     app.config.from_pyfile(
         'config.cfg', silent=True)  # instance-folders configuration
-    print(app.config)
+    # print(app.config)
     if settings_override:
         app.config.from_object(config[settings_override])
     return None
