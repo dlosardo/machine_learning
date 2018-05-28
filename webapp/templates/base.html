@@ -12,6 +12,9 @@
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles/vendor/fa-regular.min.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/main.css') }}">
     <script
           src="http://code.jquery.com/jquery-3.3.1.min.js"
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -56,7 +59,7 @@
             <a class="nav-link" href="{{ url_for('main.home') }}">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.cats') }}">Cat Page Test</a>
+            <a class="nav-link" href="{{ url_for('main.cats') }}">Cat Page</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('model_builder.models') }}">Model Builder</a>
@@ -87,5 +90,7 @@
     <script
       src="{{ url_for('static', filename='scripts/vendor/bootstrap.bundle.min.js') }}">
     </script>
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>

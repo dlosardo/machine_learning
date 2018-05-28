@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Sleepy Cat{% endblock %}
 {% block body %}
-<div>
+<div class="catpic">
+<h1 class="catpic-title">Rainy</h1>
 <img src="{{ url_for('static', filename='images/rainy_socks.jpg',
-_external=True)}}">
+_external=True)}}" height="500" >
+</div>
+<div class="catpic">
+<h1 class="catpic-title">Leon</h1>
 <img src="{{ url_for('static', filename='images/leonsleep.jpg',
-_external=True)}}">
+_external=True)}}" height="500" >
 </div>
 {% endblock %}
