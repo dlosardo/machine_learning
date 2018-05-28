@@ -33,14 +33,20 @@
             {{ form_macro.form_basic(final.submit) }}
         </div>
     </form>
-    {% if f %} <h4> {{f}} </h4>
-    {% endif %}
-    {% if hypothesis %} <h1> Hypothesis chosen: {{hypothesis}}</h1>
-    {% endif %}
-    {% if regularizer %} <h1> Regularizer chosen: {{regularizer}}</h1>
-    {% endif %}
-    {% if cost_function %} <h1> Cost Function chosen: {{cost_function}}</h1>
-    {% endif %}
-    {% if algorithm %} <h1> Algorithm chosen: {{algorithm}}</h1>
-    {% endif %}
+
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function(){
+  $('input[type=radio][name=model_attribute_form-algorithm]').change(function() {
+        if (this.value == '3') {
+          $("#hyperparam_form-learning_rate").val('');
+          $("#hyperparam_form-learning_rate").prop('disabled', true);
+        }
+        else {
+          $("#hyperparam_form-learning_rate").prop('disabled', false);
+        }
+    });
+});
+</script>
 {% endblock %}

@@ -20,9 +20,10 @@ def models():
     # form.hyperparam_form.learning_rate.render_kw = {'disabled': True}
 
     form = FinalModelForm()
+    # if form.model_attribute_form.algorithm.data == '3':
+    #     form.hyperparam_form.learning_rate.render_kw = {'disabled': True}
+    #     del form.hyperparam_form
     if form.validate_on_submit():
-        if form.model_attribute_form.algorithm.data == "3":
-            form.hyperparam_form.learning_rate.render_kw = {'disabled': True}
         """
         looks like request.files['file'] (name of form)
         and file_form.file.data is the same...
