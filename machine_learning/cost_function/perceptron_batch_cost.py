@@ -11,11 +11,12 @@ from machine_learning.model_utils.learning_type import LearningTypes
 
 
 class PerceptronBatchCost(PerceptronCost):
-    def __init__(self, hypothesis, targets):
+    def __init__(self, hypothesis, targets, **kwargs):
         """
         Batch Learning (consider all data at once)
         """
-        super(PerceptronBatchCost, self).__init__(hypothesis, targets)
+        super(PerceptronBatchCost, self).__init__(hypothesis, targets,
+                                                  **kwargs)
         self.learning_type = LearningTypes.BATCH
 
     def cost_function(self):

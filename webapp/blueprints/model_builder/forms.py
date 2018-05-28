@@ -40,9 +40,11 @@ class ModelAttributeForm(Form):
 
 class HyperParameterForm(Form):
     regularizer_weight = FloatField(
-        'Regularizer Weight', [validators.NumberRange(min=0.0)])
+        'Regularizer Weight', [validators.NumberRange(min=0.0),
+                               validators.optional()])
     learning_rate = FloatField(
-        'Learning Rate', [validators.NumberRange(min=0.0)])
+        'Learning Rate', [validators.NumberRange(min=0.0),
+                          validators.optional()])
     tolerance = FloatField(
         'Tolerance', [validators.NumberRange(min=0.0)])
 

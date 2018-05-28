@@ -11,13 +11,13 @@ from machine_learning.cost_function.cost_function import CostFunction
 
 
 class PerceptronCost(CostFunction):
-    def __init__(self, hypothesis, targets):
+    def __init__(self, hypothesis, targets, **kwargs):
         """
         Perceptron cost function
         :param: hypothesis A hypothesis object, e.g., perceptron
         :param: targets A nobs x 1 np array of targets (must be 1s or 0s)
         """
-        super(PerceptronCost, self).__init__(hypothesis, targets)
+        super(PerceptronCost, self).__init__(hypothesis, targets, **kwargs)
 
     def get_error_matrix(self):
         """

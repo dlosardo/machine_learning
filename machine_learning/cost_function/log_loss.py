@@ -15,8 +15,7 @@ from numpy.linalg import inv
 
 
 class LogLoss(CostFunction):
-    def __init__(self, hypothesis, targets, reguarlizer_name=None,
-                 regularization_weight=0):
+    def __init__(self, hypothesis, targets, **kwargs):
         """
         log loss cost function
         :param hypothesis: A hypothesis object, e.g., SimpleLinearRegression
@@ -25,8 +24,7 @@ class LogLoss(CostFunction):
             regularizer
         :param regularization_weight: A float of the weight for the regularizer
         """
-        super(LogLoss, self).__init__(hypothesis, targets, reguarlizer_name,
-                                      regularization_weight)
+        super(LogLoss, self).__init__(hypothesis, targets, **kwargs)
 
     def cost_function(self):
         """

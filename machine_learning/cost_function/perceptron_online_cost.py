@@ -15,11 +15,12 @@ from machine_learning.model_utils.learning_type import LearningTypes
 
 
 class PerceptronOnlineCost(PerceptronCost):
-    def __init__(self, hypothesis, targets):
+    def __init__(self, hypothesis, targets, **kwargs):
         """
         Online Learning (consider each data point as it comes in)
         """
-        super(PerceptronOnlineCost, self).__init__(hypothesis, targets)
+        super(PerceptronOnlineCost, self).__init__(hypothesis, targets,
+                                                   **kwargs)
         self.learning_type = LearningTypes.ONLINE
 
     def cost_function(self):
