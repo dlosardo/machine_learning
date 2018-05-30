@@ -49,7 +49,7 @@ class HyperParameterForm(Form):
         'Tolerance', [validators.NumberRange(min=0.0)])
 
 
-class FinalModelForm(FlaskForm):
+class ModelForm(FlaskForm):
     hyperparam_form = FormField(HyperParameterForm)
     model_attribute_form = FormField(ModelAttributeForm)
     data_form = FormField(DataForm)

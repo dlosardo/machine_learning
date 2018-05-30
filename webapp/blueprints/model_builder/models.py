@@ -11,3 +11,11 @@ class ModelRun(db.Model):
     data_set_path = db.Column(db.String(255))
     data_url = db.Column(db.String(255))
     results = db.Column(db.Text())
+
+    @classmethod
+    def duplicate_filename(cls, user_id, data_set_path):
+        if cls.query.filter_by(user_id=user_id,
+                               data_set_path=data_set_path).first():
+            return True
+        else:
+            return False

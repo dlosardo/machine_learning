@@ -87,6 +87,22 @@ class RegularizerTypes(Types):
     ELASTIC_NET = 4
 
 
+class RegularizerNameFactory(object):
+
+    @staticmethod
+    def get_regularizer_name(n):
+        if n == RegularizerTypes.NONE.value:
+            return None
+        elif n == RegularizerTypes.RIDGE.value:
+            return "ridge"
+        elif n == RegularizerTypes.LASSO.value:
+            return "lasso"
+        elif n == RegularizerTypes.ELASTIC_NET.value:
+            return "elastic_net"
+        else:
+            raise ValueError("Invalid regularizer input: {}".format(n))
+
+
 class CostFunctionTypes(Types):
     SQUARED_ERROR_LOSS = 1
     MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION = 2
@@ -119,12 +135,13 @@ class CostFunctionFactory(object):
         if n == CostFunctionTypes.SQUARED_ERROR_LOSS.value:
             return squared_error_loss.SquaredErrorLoss(
                 hypothesis=hypothesis, targets=targets, **kwargs)
-        if n == CostFunctionTypes.MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION.value:
+        elif n == (CostFunctionTypes.
+                   MAXIMUM_LIKELIHOOD_NORMAL_DISTRIBUTION.value):
             return (
                 maximum_likelihood_normal_distribution.
                 MaximumLikelihoodNormalDistribution(
                     hypothesis=hypothesis, targets=targets, **kwargs))
-        if n == CostFunctionTypes.LOG_LOSS.value:
+        elif n == CostFunctionTypes.LOG_LOSS.value:
             return log_loss.LogLoss(
                 hypothesis=hypothesis, targets=targets, **kwargs)
         elif n == CostFunctionTypes.PERCEPTRON_BATCH_COST.value:
@@ -142,12 +159,12 @@ class CostFunctionFactory(object):
         if cost_function_name == "squared_error_loss":
             return squared_error_loss.SquaredErrorLoss(
                 hypothesis=hypothesis, targets=targets, **kwargs)
-        if cost_function_name == "maximum_likelihood_normal_distribution":
+        elif cost_function_name == "maximum_likelihood_normal_distribution":
             return (
                 maximum_likelihood_normal_distribution.
                 MaximumLikelihoodNormalDistribution(
                     hypothesis=hypothesis, targets=targets, **kwargs))
-        if cost_function_name == "log_loss":
+        elif cost_function_name == "log_loss":
             return log_loss.LogLoss(
                 hypothesis=hypothesis, targets=targets, **kwargs)
         elif cost_function_name == "perceptron_batch_cost":

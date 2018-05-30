@@ -47,6 +47,15 @@ $(document).ready(function(){
           $("#hyperparam_form-learning_rate").prop('disabled', false);
         }
     });
+  $('input[type=radio][name=model_attribute_form-regularizer]').change(function() {
+        if (this.value == "1") {
+          $("#hyperparam_form-regularizer_weight").val('');
+          $("#hyperparam_form-regularizer_weight").prop('disabled', true);
+        }
+        else {
+          $("#hyperparam_form-regularizer_weight").prop('disabled', false);
+        }
+    });
 });
 </script>
 {% endblock %}
