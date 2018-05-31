@@ -16,8 +16,9 @@ Matrix form:
 """
 from numpy import hstack, append, ones
 from machine_learning.hypothesis.hypothesis import Hypothesis
-from machine_learning.model_utils.parameter import Parameter, ParameterList
-from machine_learning.utils.exceptions import IncorrectMatrixDimensions, ParameterValuesNotInitialized
+from machine_learning.model_utils.parameter import Parameter
+from machine_learning.utils.exceptions import (
+    IncorrectMatrixDimensions, ParameterValuesNotInitialized)
 
 
 class SimpleLinearRegression(Hypothesis):
@@ -32,15 +33,22 @@ class SimpleLinearRegression(Hypothesis):
         self.set_parameters()
         if self.features.shape[1] != 1:
             raise IncorrectMatrixDimensions(
-                "Number of columns is equal to %d but should be equal to 1" % self.features.shape[1])
+                '''Number of columns is equal to %d but should be equal to
+                1'''.format(self.features.shape[1]))
         # Next line adds a vector of 1s indicating the intercept.
-        # self.features becomes a matrix of dimension nobs x 2 with the first column
-         # consisting of 1s and the second column consisting of x values.
-        self.features = append(ones(self.features.shape[0]).reshape(self.features.shape[0], 1), self.features, 1)
+        # self.features becomes a matrix of
+        # dimension nobs x 2 with the first column
+        # consisting of 1s and the second column consisting of x values.
+        self.features = append(
+            ones(self.features.shape[0]).reshape(
+                self.features.shape[0], 1), self.features, 1)
 
     def set_parameters(self):
-        self.intercept = Parameter(name="intercept", value=None, variance=None, default_starting_value=0.)
-        self.slope = Parameter(name="slope", value=None, variance=None, default_starting_value=0.)
+        self.intercept = Parameter(
+            name="intercept", value=None,
+            variance=None, default_starting_value=0.)
+        self.slope = Parameter(
+            name="slope", value=None, variance=None, default_starting_value=0.)
         self.parameter_list.add_parameter(self.intercept)
         self.parameter_list.add_parameter(self.slope)
 
@@ -53,11 +61,14 @@ class SimpleLinearRegression(Hypothesis):
         if not self.parameters_initialized():
             raise ParameterValuesNotInitialized(
                     "Parameter values have not yet been initialized")
-        if (param_array.shape[0] != self.nparams or len(param_array.shape) != 2 or param_array.shape[1] != 1):
+        if (param_array.shape[0] != self.nparams or
+           len(param_array.shape) != 2 or param_array.shape[1] != 1):
             raise IncorrectMatrixDimensions(
                     "Parameter array needs to be %d by 1" % self.nparams)
-        self.parameter_list.get_parameter_by_name("intercept").value = param_array[0][0]
-        self.parameter_list.get_parameter_by_name("slope").value = param_array[1][0]
+        self.parameter_list.get_parameter_by_name(
+            "intercept").value = param_array[0][0]
+        self.parameter_list.get_parameter_by_name(
+            "slope").value = param_array[1][0]
 
     def get_parameters(self):
         """
@@ -70,8 +81,9 @@ class SimpleLinearRegression(Hypothesis):
         if not self.parameters_initialized():
             raise ParameterValuesNotInitialized(
                     "Parameter values have not yet been initialized")
-        parms_tmp = hstack((self.parameter_list.get_parameter_by_name("intercept").value
-            , self.parameter_list.get_parameter_by_name("slope").value))
+        parms_tmp = hstack((
+            self.parameter_list.get_parameter_by_name("intercept").value,
+            self.parameter_list.get_parameter_by_name("slope").value))
         parms_tmp = parms_tmp.reshape(self.nparams, 1)
         return parms_tmp
 

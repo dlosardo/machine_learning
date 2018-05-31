@@ -1,5 +1,6 @@
 *.pyc
 __pycache__
+*.pytest_cache/
 *.py[cod]
 *$py.class
 
@@ -35,3 +36,13 @@ nosetests.xml
 coverage.xml
 *,cover
 *.cover
+
+.DS_Store
+database.db
+ipython-notebooks/
+instance/config.cfg
+instance/data
+
+webapp/static/data
+webapp/migrations
+migrations

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Model Results{% endblock %}
+{% block body %}
+<div>
+    <h1>Model Results</h1>
+    <table class="table">
+        {% for i in m['results'] %}
+        <tr>
+            {% for j in i %}
+            <th>{{j}}</th>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <h2><a href="{{ url_for('model_builder.models') }}">Return to Model Builder</a></h1>
+</div>
+{% endblock %}

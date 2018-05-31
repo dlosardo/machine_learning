@@ -15,11 +15,12 @@ from machine_learning.model_utils.learning_type import LearningTypes
 
 
 class PerceptronOnlineCost(PerceptronCost):
-    def __init__(self, hypothesis, targets):
+    def __init__(self, hypothesis, targets, **kwargs):
         """
         Online Learning (consider each data point as it comes in)
         """
-        super(PerceptronOnlineCost, self).__init__(hypothesis, targets)
+        super(PerceptronOnlineCost, self).__init__(hypothesis, targets,
+                                                   **kwargs)
         self.learning_type = LearningTypes.ONLINE
 
     def cost_function(self):
@@ -34,11 +35,13 @@ class PerceptronOnlineCost(PerceptronCost):
 
     def cost_function_derivative(self, index):
         """
-        The partial derivative of the cost function with respect to the parameters
+        The partial derivative of the cost function with
+            respect to the parameters
         """
         y = self.hypothesis.hypothesis_function(index)
         return (self.targets[index] - y).dot(
-                self.hypothesis.features[index, :].reshape(1, self.hypothesis.nparams)).reshape(
+                self.hypothesis.features[index, :].reshape(
+                    1, self.hypothesis.nparams)).reshape(
                         self.hypothesis.nparams, 1)
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):

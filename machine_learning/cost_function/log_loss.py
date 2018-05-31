@@ -1,9 +1,11 @@
 """
 Log Loss Cost class function
 HAS A Hypothesis
--1/nobs sum(from 1 to nobs) (y_i*log(hypothesis(x_i)) + (1 - y_i)*log(1-hypothesis(x_i)))
+-1/nobs sum(from 1 to nobs) (y_i*log(hypothesis(x_i)) +
+    (1 - y_i)*log(1-hypothesis(x_i)))
 in matrix form:
-    cost_function = 1/nobs*(-Y'%*%log(Hypothesis) - (1 - Y)'%*%log(1 - Hypothesis)
+    cost_function = 1/nobs*(-Y'%*%log(Hypothesis) -
+        (1 - Y)'%*%log(1 - Hypothesis)
 ' is the transpose operation
 %*% is matrix multiplication
 """
@@ -13,15 +15,16 @@ from numpy.linalg import inv
 
 
 class LogLoss(CostFunction):
-    def __init__(self, hypothesis, targets, reguarlizer_name=None, regularization_weight=0):
+    def __init__(self, hypothesis, targets, **kwargs):
         """
         log loss cost function
         :param hypothesis: A hypothesis object, e.g., SimpleLinearRegression
         :param targets: A nobs x 1 np array of y values
-        :param regularizer_name: A string representing the name of the regularizer
+        :param regularizer_name: A string representing the name of the
+            regularizer
         :param regularization_weight: A float of the weight for the regularizer
         """
-        super(LogLoss, self).__init__(hypothesis, targets, reguarlizer_name, regularization_weight)
+        super(LogLoss, self).__init__(hypothesis, targets, **kwargs)
 
     def cost_function(self):
         """
@@ -39,7 +42,8 @@ class LogLoss(CostFunction):
     def cost_function_derivative(self):
         """
         The derivative of the cost function for all params
-        :returns: A nparam x 1 np array of the values of the derivatives of the parameters
+        :returns: A nparam x 1 np array of the values of the
+            derivatives of the parameters
         """
         return 1./self.nobs*(self.hypothesis.features.T.dot(
             self.hypothesis.hypothesis_function() - self.targets))
@@ -47,10 +51,13 @@ class LogLoss(CostFunction):
     def cost_function_second_derivative(self):
         """
         The second derivative of the cost function for all params
-        :returns A nparam x nparam np array of the values of the 2nd derivatives of the parameters
+        :returns A nparam x nparam np array of the values of the
+            2nd derivatives of the parameters
         """
-        return -1.*(-1./self.nobs * self.hypothesis.features.T.dot(diag(diag(self.hypothesis.hypothesis_function() * (
-            1. - self.hypothesis.hypothesis_function())[:,0]))).dot(self.hypothesis.features))
+        return -1.*(-1./self.nobs * self.hypothesis.features.T.dot(
+            diag(diag(self.hypothesis.hypothesis_function() * (
+                1. - self.hypothesis.hypothesis_function())[:, 0]))).dot(
+                self.hypothesis.features))
 
     def convergence_criteria_met(self, current_cost, new_cost, tolerance):
         return self.convergence_value(current_cost, new_cost) < tolerance
