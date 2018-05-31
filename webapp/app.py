@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_uploads import configure_uploads
 
-from webapp.extensions import db, data_uploads
+from webapp.extensions import db, data_uploads, debug_toolbar
 from webapp.blueprints.main import main
 from webapp.blueprints.user import user
 from webapp.blueprints.model_builder import model_builder
@@ -48,4 +48,5 @@ def extensions(app):
     """
     db.init_app(app)
     configure_uploads(app, data_uploads)
+    debug_toolbar.init_app(app)
     return None

@@ -1,7 +1,7 @@
 import os
 from flask import (
     Blueprint, render_template, redirect,
-    url_for, session, request)
+    url_for, session, request)  # , flash)
 from werkzeug.utils import secure_filename
 from webapp.extensions import data_uploads, db
 from webapp.blueprints.user.models import User
@@ -36,17 +36,13 @@ def models():
 
         file = request.files['data_form-file']
         filename = secure_filename(file.filename)
-        print("FILENAME: {}".format(filename))
         if ModelRun.duplicate_filename(user.id, filename):
             print("File already exists under this user, overwriting..")
             os.remove(data_uploads.path(filename))
-        session['f'] = filename
+        session['filename'] = filename
         f1 = data_uploads.save(file, name=filename)
-        print("FILE AFTER: {}".format(f1))
 
-        # print(data_uploads.url(f1))
-        # print(f1)
-
+        # obtaining all form info
         session['hypothesis'] = form.model_attribute_form.hypothesis.data
         session['regularizer'] = form.model_attribute_form.regularizer.data
         session['cost_function'] = form.model_attribute_form.cost_function.data
@@ -57,6 +53,7 @@ def models():
                                          .regularizer_weight.data)
         session['tolerance'] = form.hyperparam_form.tolerance.data
         session['learning_rate'] = form.hyperparam_form.learning_rate.data
+
         # adding model run to database
         mr = ModelRun(hypothesis=form.model_attribute_form.hypothesis.data,
                       cost_function=(form.model_attribute_form
@@ -68,7 +65,7 @@ def models():
                       data_url=data_uploads.url(f1))
         db.session.add(mr)
         db.session.commit()
-        model_obj = run("webapp/static/data/" + session['f'],
+        model_obj = run("webapp/static/data/" + session['filename'],
                         session['nfeatures'], session['ntargets'],
                         HypothesisTypes.get_type_from_number(int(session.get(
                             'hypothesis'))),
@@ -81,6 +78,7 @@ def models():
                         session.get('regularizer_weight'),
                         session.get('learning_rate'),
                         session.get('tolerance'), None)
+        # flash("Model successfully submitted and running...", "success")
         session['model_results'] = {'results':
                                     model_obj.get_results()}
         return redirect(url_for('.model_results'))
@@ -91,7 +89,7 @@ def models():
                            regularizer=session.get('regularizer'),
                            cost_function=session.get('cost_function'),
                            algorithm=session.get('algorithm'),
-                           f=session.get('f')
+                           filename=session.get('filename')
                            )
 
 

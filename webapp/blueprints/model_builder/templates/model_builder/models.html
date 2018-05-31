@@ -2,6 +2,17 @@
 {% import 'macros/form.html' as form_macro with context%}
 {% block title %}Model Builder{% endblock %}
 {% block body %}
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <div id="flash-messages" class="row sm-margin-top">
+        {% for category, msg in messages %}
+          <div class="alert alert-{{ category }}" role="alert">
+            {{ msg }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
   <p>Please select model attributes and file</p>
     <form method="POST" enctype="multipart/form-data">
         {{ final.hidden_tag() }}
