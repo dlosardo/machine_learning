@@ -25,7 +25,7 @@ class LogisticRegression(Regression):
         """
         self.set_parameters()
 
-    def hypothesis_function(self):
+    def hypothesis_function(self, data=None):
         """
         Computes the hypothesis function.
         Estimated probability that y=1 on input x
@@ -34,7 +34,11 @@ class LogisticRegression(Regression):
         :returns: A matrix of dimension nobs x 1 with the results of the
          hypothesis computation.
         """
-        return 1. / (1. + exp(-1. * self.features.dot(self.get_parameters())))
+        if data is not None:
+            return 1. / (1. + exp(-1. * data.dot(self.get_parameters())))
+        else:
+            return 1. / (1. + exp(-1. * self.features.dot(
+                self.get_parameters())))
 
     def decision_boundary(self):
         """
@@ -42,6 +46,8 @@ class LogisticRegression(Regression):
         theta*features >= 0 when y = 1
         theta*features < 0 when y = 0
         theta[1:nparams]*features_no_intercept >= theta[0]*1
+
+        solve for theta*features = 0
         """
         # TODO: implement and plot
         pass
