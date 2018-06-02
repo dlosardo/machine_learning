@@ -12,7 +12,8 @@ The log-likelihood is:
         1/2*sigma^2 * sum(i to nobs)(Y_i - X_i%*%THETA)^2
 """
 from machine_learning.cost_function.cost_function import CostFunction
-from numpy import log, pi, var, mean, hstack, vstack, array, sqrt, diag
+from numpy import (log, pi, var, mean, hstack, vstack,
+                   sqrt, diag, zeros)
 from numpy.linalg import inv
 
 
@@ -72,8 +73,8 @@ class MaximumLikelihoodNormalDistribution(CostFunction):
         # conditional_mean))/self.error_variance.value**2
         # covariance between error variance and conditional mean
         # is assumed to be zero
-        conditional_mean_and_error_variance_covariance = array(
-            [[0.], [0.], [0.]])
+        conditional_mean_and_error_variance_covariance = zeros(
+            self.nparams).reshape(self.nparams, 1)
         error_variance_covariance = (
             self.nobs)/(2.*self.error_variance.value**2) - ((
                 self.targets - conditional_mean).T.dot(
