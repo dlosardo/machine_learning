@@ -1,6 +1,6 @@
 """
 Newton-Raphson Algorithm
-IS A SupervisedAlgorithm
+IS A ParametricAlgorithm
 Need to know the matrix of second derivatives wrt parameters.
 theta_next = theta_current - partial derivative of likelihood wrt theta
     / partial second derivative of likelihood wrt theta
@@ -8,12 +8,12 @@ with this method we can derive standard errors!
 they are sqrt(1 / negative partial second derivative of likelihood
     wrt parameters)
 """
-from machine_learning.algorithm.iterative_supervised_algorithm import (
-    IterativeSupervisedAlgorithm)
+from machine_learning.algorithm.iterative_parametric_algorithm import (
+    IterativeParametricAlgorithm)
 from numpy.linalg import inv, norm
 
 
-class NewtonRaphson(IterativeSupervisedAlgorithm):
+class NewtonRaphson(IterativeParametricAlgorithm):
     def __init__(self, cost_function, tolerance=None,
                  param_starting_values=None):
         """

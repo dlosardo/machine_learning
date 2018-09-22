@@ -9,7 +9,7 @@ General Set Up:
  MachineLearningAlgorithm
          |
          V
-  SupervisedAlgorithm(CostFunction)
+  ParametricAlgorithm(CostFunction)
          |
          V
   GradientDescent(learning_rate, CostFunction)
@@ -47,7 +47,7 @@ def extract_data(data, number_features, number_targets):
 
 
 def run(input_data_file, number_features, number_targets, hypothesis_type,
-        cost_function_type, algorithm_type, regularizer_name,
+        algorithm_type, cost_function_type, k, regularizer_name,
         regularization_weight, learning_rate, tolerance,
         starting_parameter_values_file):
     """
@@ -59,7 +59,7 @@ def run(input_data_file, number_features, number_targets, hypothesis_type,
     # setup model and check model dependencies
     # (will fail loudly here if not set up properly)
     model_setup_obj = ModelSetup(
-        hypothesis_type, cost_function_type, algorithm_type)
+        hypothesis_type, algorithm_type, cost_function_type)
     # validate model setup
     model_setup_obj.check_dependencies()
     # read in data
@@ -68,7 +68,7 @@ def run(input_data_file, number_features, number_targets, hypothesis_type,
     # obtain algorithm object
     algorithm_obj = model_setup_obj.model_setup(
         features, targets, regularizer_name, regularization_weight,
-        learning_rate, tolerance, starting_parameter_values)
+        k, learning_rate, tolerance, starting_parameter_values)
     # create learning model object and run model and print results
     learning_model_obj = LearningModel(algorithm_obj)
     learning_model_obj.run_model()

@@ -9,3 +9,9 @@ class MachineLearningAlgorithm(object):
 
     def algorithm(self):
         raise NotImplementedError
+
+    def predict(self, x):
+        raise NotImplementedError
+
+    def print_results(self):
+        raise NotImplementedError

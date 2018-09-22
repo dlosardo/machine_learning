@@ -9,12 +9,13 @@ features are a matrix of x values of the form:
     nobs x (nx + 1)
     to include the intercept.
 """
-from machine_learning.hypothesis.hypothesis import Hypothesis
+from machine_learning.hypothesis.parametric_hypothesis import (
+    ParametricHypothesis)
 from machine_learning.model_utils.parameter import Parameter
 from machine_learning.utils.math_utils import add_constant
 
 
-class Regression(Hypothesis):
+class Regression(ParametricHypothesis):
     """
     """
     def __init__(self, features):
