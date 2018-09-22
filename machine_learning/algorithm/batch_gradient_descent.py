@@ -1,6 +1,6 @@
 """
 Batch Gradient Descent ML Algorithm
-IS A SupervisedAlgorithm and GradientDescent
+IS A ParametricAlgorithm and GradientDescent
 """
 from machine_learning.algorithm.gradient_descent import GradientDescent
 

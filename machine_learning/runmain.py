@@ -37,7 +37,8 @@ def main(args=None):
         help='Can be one of: {}'.format(
             ", ".join(HypothesisTypes.names_list())))
     parser.add_argument(
-        '--cost-function-name', type=str, required=True,
+        '--cost-function-name', type=str, required=False,
+        default=None,
         choices=CostFunctionTypes.names_list(),
         dest='cost_function_name',
         help='Can be one of: {}'.format(
@@ -48,6 +49,11 @@ def main(args=None):
         dest='algorithm_name',
         help='Can be one of: {}'.format(
             ", ".join(AlgorithmTypes.names_list())))
+    parser.add_argument(
+        '--k', type=int, required=False,
+        default=None,
+        dest='k',
+        help='An integer representing k for K Nearest Neighbors')
     parser.add_argument(
         '--regularizer-name', type=str, required=False,
         default=None, choices=RegularizerTypes.names_list(),
@@ -72,12 +78,19 @@ def main(args=None):
         dest='starting_parameter_values_file',
         help='A filename containing starting values for parameters')
     options = parser.parse_args(args)
+    hypothesis_type = HypothesisTypes[options.hypothesis_name.upper()]
+    cost_function_type = None
+    if options.cost_function_name:
+        cost_function_type = CostFunctionTypes[
+            options.cost_function_name.upper()]
+    algorithm_type = AlgorithmTypes[options.algorithm_name.upper()]
     output = run(
         options.input_data_file, options.number_features,
         options.number_targets,
-        HypothesisTypes[options.hypothesis_name.upper()],
-        CostFunctionTypes[options.cost_function_name.upper()],
-        AlgorithmTypes[options.algorithm_name.upper()],
+        hypothesis_type,
+        algorithm_type,
+        cost_function_type,
+        options.k,
         options.regularizer_name, options.regularization_weight,
         options.learning_rate, options.tolerance,
         options.starting_parameter_values_file)

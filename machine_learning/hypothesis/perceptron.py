@@ -4,12 +4,13 @@ Perceptron is a Hypothesis
     y = 1 if z>0 else 0
 """
 from numpy.linalg import norm
-from machine_learning.hypothesis.hypothesis import Hypothesis
+from machine_learning.hypothesis.parametric_hypothesis import (
+    ParametricHypothesis)
 from machine_learning.model_utils.parameter import Parameter
 from machine_learning.utils.math_utils import add_constant
 
 
-class Perceptron(Hypothesis):
+class Perceptron(ParametricHypothesis):
     """
     """
     def __init__(self, features):

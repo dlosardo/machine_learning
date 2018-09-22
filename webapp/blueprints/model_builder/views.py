@@ -22,6 +22,7 @@ def models():
     if form.validate_on_submit():
         # getting current user in session
         user = User.query.filter_by(username=session.get('name')).first()
+        print(user)
         """
         looks like request.files['file'] (name of form)
         and file_form.file.data is the same...
@@ -49,6 +50,7 @@ def models():
         session['algorithm'] = form.model_attribute_form.algorithm.data
         session['nfeatures'] = form.data_form.nfeatures.data
         session['ntargets'] = form.data_form.ntargets.data
+        session['k'] = form.hyperparam_form.k.data
         session['regularizer_weight'] = (form.hyperparam_form
                                          .regularizer_weight.data)
         session['tolerance'] = form.hyperparam_form.tolerance.data
@@ -67,12 +69,10 @@ def models():
         db.session.commit()
         model_obj = run("webapp/static/data/" + session['filename'],
                         session['nfeatures'], session['ntargets'],
-                        HypothesisTypes.get_type_from_number(int(session.get(
-                            'hypothesis'))),
-                        CostFunctionTypes.get_type_from_number(int(session.get(
-                            'cost_function'))),
-                        AlgorithmTypes.get_type_from_number(int(session.get(
-                            'algorithm'))),
+                        HypothesisTypes(int(session.get('hypothesis'))),
+                        AlgorithmTypes(int(session.get('algorithm'))),
+                        CostFunctionTypes(int(session.get('cost_function'))),
+                        session.get('k'),
                         RegularizerNameFactory.get_regularizer_name(
                             int(session.get("regularizer"))),
                         session.get('regularizer_weight'),

@@ -16,7 +16,8 @@ class DataForm(Form):
     nfeatures = IntegerField("Number Features",
                              [validators.NumberRange(min=1)])
     ntargets = IntegerField("Number Targets",
-                            [validators.NumberRange(min=1)])
+                            [validators.NumberRange(min=1),
+                             validators.optional()])
 
 
 class ModelAttributeForm(Form):
@@ -39,6 +40,9 @@ class ModelAttributeForm(Form):
 
 
 class HyperParameterForm(Form):
+    k = IntegerField(
+        'k', [validators.NumberRange(min=1),
+              validators.optional()])
     regularizer_weight = FloatField(
         'Regularizer Weight', [validators.NumberRange(min=0.0),
                                validators.optional()])
@@ -46,7 +50,8 @@ class HyperParameterForm(Form):
         'Learning Rate', [validators.NumberRange(min=0.0),
                           validators.optional()])
     tolerance = FloatField(
-        'Tolerance', [validators.NumberRange(min=0.0)])
+        'Tolerance', [validators.NumberRange(min=0.0),
+                      validators.optional()])
 
 
 class ModelForm(FlaskForm):
@@ -58,16 +63,17 @@ class ModelForm(FlaskForm):
     def validate(self):
         if not super().validate():
             return False
-        hypothesis_type = HypothesisTypes.get_type_from_number(
+        hypothesis_type = HypothesisTypes(
             int(self.model_attribute_form.hypothesis.data))
-        cost_function_type = CostFunctionTypes.get_type_from_number(
+        cost_function_type = CostFunctionTypes(
             int(self.model_attribute_form.cost_function.data))
-        algorithm_type = AlgorithmTypes.get_type_from_number(
+        algorithm_type = AlgorithmTypes(
             int(self.model_attribute_form.algorithm.data))
         try:
             model_setup_obj = ModelSetup(hypothesis_type,
-                                         cost_function_type,
-                                         algorithm_type)
+                                         algorithm_type,
+                                         cost_function_type
+                                         )
             model_setup_obj.check_dependencies()
             return True
         except HypothesisCostFunctionDependencyException as e:

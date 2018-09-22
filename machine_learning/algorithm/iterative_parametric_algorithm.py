@@ -1,18 +1,18 @@
 """
-Abstract class for iterative supervised algorithm
+Abstract class for iterative parametric algorithm
 """
-from machine_learning.algorithm.supervised_algorithm import SupervisedAlgorithm
+from machine_learning.algorithm.parametric_algorithm import ParametricAlgorithm
 
 
-class IterativeSupervisedAlgorithm(SupervisedAlgorithm):
+class IterativeParametricAlgorithm(ParametricAlgorithm):
     def __init__(self, cost_function, param_starting_values):
         """
-        Iterative Supervised Algorithm.
+        Iterative Parametric Algorithm.
         :param cost_function: A CostFunction object, e.g., SquaredErrorLoss
         :param param_starting_values: A dict of the form:
             {parameter_name: parameter_value}
         """
-        super(IterativeSupervisedAlgorithm, self).__init__(
+        super(IterativeParametricAlgorithm, self).__init__(
             cost_function, param_starting_values)
         self.iter = 0
         self.converged = False
@@ -22,10 +22,10 @@ class IterativeSupervisedAlgorithm(SupervisedAlgorithm):
     def algorithm(self):
         """
         Run the algorithm
-        Call iterate until the change in the cost function is less than
-            the specified tolerance value
+        Call iterate until the the convergence criteria is met
         """
-        while (True):
+        while (not self.converged):
+            self.iter = self.iter + 1
             self.iterate()
             self.cost_function_list.append(self.cost_function.cost_function())
             self.convergence_value_list.append(self.convergence_value())
@@ -39,8 +39,6 @@ class IterativeSupervisedAlgorithm(SupervisedAlgorithm):
                     self.cost_function.cost_function()))
             if self.convergence_criteria_met():
                 self.converged = True
-                break
-            self.iter = self.iter + 1
 
     def reset(self):
         raise NotImplementedError

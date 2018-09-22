@@ -1,12 +1,16 @@
 """
 Gradient Descent ML Algorithm
-IS an IterativeSupervisedAlgorithm
+IS an IterativeParametricAlgorithm
+One idea is to have the learning_rate be a
+function of # of iterations, such as,
+learning_rate / i
+where i = iteration
 """
-from machine_learning.algorithm.iterative_supervised_algorithm import (
-    IterativeSupervisedAlgorithm)
+from machine_learning.algorithm.iterative_parametric_algorithm import (
+    IterativeParametricAlgorithm)
 
 
-class GradientDescent(IterativeSupervisedAlgorithm):
+class GradientDescent(IterativeParametricAlgorithm):
     def __init__(self, cost_function, learning_rate=None, tolerance=None,
                  param_starting_values=None):
         """

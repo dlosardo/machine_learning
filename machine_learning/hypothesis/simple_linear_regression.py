@@ -15,13 +15,14 @@ Matrix form:
     nobs x nparams, and THETA is a matrix of dimension nparms x 1
 """
 from numpy import hstack, append, ones
-from machine_learning.hypothesis.hypothesis import Hypothesis
+from machine_learning.hypothesis.parametric_hypothesis import (
+    ParametricHypothesis)
 from machine_learning.model_utils.parameter import Parameter
 from machine_learning.utils.exceptions import (
     IncorrectMatrixDimensions, ParameterValuesNotInitialized)
 
 
-class SimpleLinearRegression(Hypothesis):
+class SimpleLinearRegression(ParametricHypothesis):
     """
     Constructor creates two Parameter objects: intercept and slope
     nparams is set to the number of features + 1
