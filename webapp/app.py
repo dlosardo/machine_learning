@@ -50,5 +50,5 @@ def extensions(app):
     with app.app_context():
         db.create_all()
     configure_uploads(app, data_uploads)
-    debug_toolbar.init_app(app)
+    # debug_toolbar.init_app(app)
     return None
